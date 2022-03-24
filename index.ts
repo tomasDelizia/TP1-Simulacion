@@ -1,4 +1,3 @@
-// Import stylesheets
 import { GeneradorLineal } from './GeneradorLineal';
 import { GeneradorMultiplicativo } from './GeneradorMultiplicativo';
 import { GeneradorNumeros } from './GeneradorNumeros';
@@ -11,7 +10,6 @@ appDiv.innerHTML = `<h1>Trabajo Práctico N° 1 de Simulación</h1>`;
 const generadorLineal: GeneradorNumeros = new GeneradorLineal();
 const generadorMultiplicativo: GeneradorNumeros = new GeneradorMultiplicativo();
 
-const container: HTMLElement = document.getElementById('app') as HTMLElement;
 const btnLineal: HTMLButtonElement = document.getElementById('btnLineal') as HTMLButtonElement;
 const btnMultiplicativo: HTMLButtonElement = document.getElementById('btnMultiplicativo') as HTMLButtonElement;
 const btnPrueba: HTMLButtonElement = document.getElementById('btnPrueba') as HTMLButtonElement;
@@ -22,7 +20,7 @@ const txtK: HTMLInputElement = document.getElementById('txtK') as HTMLInputEleme
 const txtG: HTMLInputElement = document.getElementById('txtG') as HTMLInputElement;
 const txtM: HTMLInputElement = document.getElementById('txtM') as HTMLInputElement;
 const txtC: HTMLInputElement = document.getElementById('txtC') as HTMLInputElement;
-const tablaLineal: HTMLTableElement = document.getElementById('tablaMetodoLineal') as HTMLTableElement;
+const tablaNumeros: HTMLTableElement = document.getElementById('tablaNumeros') as HTMLTableElement;
 
 
 txtA.addEventListener('input', e => {
@@ -36,9 +34,6 @@ txtG.addEventListener('input', e => {
 })
 
 btnLineal.addEventListener('click', async e => {
-    for (var i = 1; i <= tablaLineal.rows.length; i++) {
-        tablaLineal.deleteRow(i);
-    }
 
     let muestra: number = Number(txtMuestra.value);
     let semilla: number = Number(txtSemilla.value);
@@ -82,12 +77,11 @@ btnMultiplicativo.addEventListener('click', async e => {
 })
 
 function agregarDatos(vec: number[]){
-    let fila = tablaLineal.insertRow();
+    let fila = tablaNumeros.insertRow();
     let celdaI = fila.insertCell();
     let celdaXi = fila.insertCell();
     let celdaRnd = fila.insertCell();
     celdaI.appendChild(document.createTextNode(String(vec[0])));
     celdaXi.appendChild(document.createTextNode(String(vec[1])));
     celdaRnd.appendChild(document.createTextNode(String(vec[2])));
-
 }
