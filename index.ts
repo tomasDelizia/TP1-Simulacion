@@ -68,10 +68,10 @@ btnMultiplicativo.addEventListener('click', async e => {
     else {
         const a: number = 1 + 4 * k;
         const m: number = Math.pow(2, g);
-        const rndsLineal: number[][] =
-            await generadorLineal.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
-        for (let i = 0; i < rndsLineal.length; i++) {
-            agregarDatos(rndsLineal[i])
+        const rndsMultiplicativo: number[][] =
+            await generadorMultiplicativo.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
+        for (let i = 0; i < rndsMultiplicativo.length; i++) {
+            agregarDatos(rndsMultiplicativo[i])
         }
     }
 })
