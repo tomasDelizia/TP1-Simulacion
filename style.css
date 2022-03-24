@@ -1,0 +1,13 @@
+h1, h2 {
+  font-family: Lato;
+}
+table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  min-width: 400px;
+}
+
+body{
+  background-color: darkgrey;
+}
