@@ -21,6 +21,7 @@ const txtK: HTMLInputElement = document.getElementById('txtK') as HTMLInputEleme
 const txtG: HTMLInputElement = document.getElementById('txtG') as HTMLInputElement;
 const txtM: HTMLInputElement = document.getElementById('txtM') as HTMLInputElement;
 const txtC: HTMLInputElement = document.getElementById('txtC') as HTMLInputElement;
+const ResultHipotesis: HTMLInputElement = document.getElementById('ResultHipotesis') as HTMLInputElement;
 const tablaNumeros: HTMLTableElement = document.getElementById('tablaNumeros') as HTMLTableElement;
 const tablaChi: HTMLTableElement = document.getElementById('tablaChi') as HTMLTableElement;
 
@@ -53,7 +54,7 @@ btnLineal.addEventListener('click', async e => {
         let semilla: number = Number(txtSemilla.value);
         let k: number = Number(txtK.value);
         let g: number = Number(txtG.value);
-        let c: number = 0;
+        let c: number = Number(txtC.value);
 
         const a: number = 1 + 4 * k;
         const m: number = Math.pow(2, g);
@@ -82,7 +83,7 @@ btnMultiplicativo.addEventListener('click', async e => {
         let g: number = Number(txtG.value);
         let c: number = 0;
 
-        const a: number = 1 + 4 * k;
+        const a: number = 3 + 8 * k;
         const m: number = Math.pow(2, g);
         const rndsMultiplicativo: number[][] =
             await generadorMultiplicativo.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
@@ -100,10 +101,13 @@ btnLimpiar.addEventListener('click', () => {
 
 btnPrueba.addEventListener('click', () => {
     let prueba: TestChiCuadrado = new TestChiCuadrado();
-    prueba.pruebaChi(5, randoms);
+    let numeros: number[] = [
+        0.15, 0.22 , 0.41 , 0.65 , 0.84 , 0.81 , 0.62 , 0.45 , 0.32 , 0.07 , 0.11 , 0.29 , 0.58 , 0.73 , 0.93 , 0.97 , 0.79 , 0.55, 0.35 , 0.09 , 0.99 , 0.51 , 0.35 , 0.02 , 0.19 , 0.24 , 0.98 , 0.10 , 0.31 , 0.17 
+      ];
+    prueba.pruebaChi(5, numeros);
     for (let i = 0; i < prueba.tabla.length; i++) {
         agregarDatosChi(prueba.tabla[i])
-    }
+    } 
 })
 
 function limpiarParametros() {

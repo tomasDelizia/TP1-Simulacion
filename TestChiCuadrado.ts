@@ -22,11 +22,11 @@ export class TestChiCuadrado {
       let estadistico : number = (Math.pow((frecObservada-frecEsperada),2)) / frecEsperada;
       this.estadisticoAcum += estadistico;
       this.tabla.push([
-        limInferior + '-' + limSuperior,
+        limInferior.toFixed(2) + ' - ' + limSuperior.toFixed(2),
         frecObservada.toString(),
         frecEsperada.toString(),
-        estadistico.toString(),
-        this.estadisticoAcum.toString(),
+        estadistico.toFixed(4).toString(),
+        this.estadisticoAcum.toFixed(4).toString(),
       ]);
       limInferior = limSuperior;
     }
