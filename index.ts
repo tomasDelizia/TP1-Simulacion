@@ -2,6 +2,7 @@ import { GeneradorLineal } from './GeneradorLineal';
 import { GeneradorMultiplicativo } from './GeneradorMultiplicativo';
 import { GeneradorNumeros } from './GeneradorNumeros';
 import './style.css';
+import { TestChiCuadrado } from './TestChiCuadrado';
 
 const appDiv: HTMLElement = document.getElementById('app');
 appDiv.innerHTML = `<h1>Trabajo Práctico N° 1 de Simulación</h1>`;
@@ -12,6 +13,7 @@ const generadorMultiplicativo: GeneradorNumeros = new GeneradorMultiplicativo();
 const btnLineal: HTMLButtonElement = document.getElementById('btnLineal') as HTMLButtonElement;
 const btnMultiplicativo: HTMLButtonElement = document.getElementById('btnMultiplicativo') as HTMLButtonElement;
 const btnLimpiar: HTMLButtonElement = document.getElementById('btnLimpiar') as HTMLButtonElement;
+const btnPrueba: HTMLButtonElement = document.getElementById('btnPrueba') as HTMLButtonElement;
 const txtMuestra: HTMLInputElement = document.getElementById('txtMuestra') as HTMLInputElement;
 const txtSemilla: HTMLInputElement = document.getElementById('txtSemilla') as HTMLInputElement;
 const txtA: HTMLInputElement = document.getElementById('txtA') as HTMLInputElement;
@@ -20,7 +22,9 @@ const txtG: HTMLInputElement = document.getElementById('txtG') as HTMLInputEleme
 const txtM: HTMLInputElement = document.getElementById('txtM') as HTMLInputElement;
 const txtC: HTMLInputElement = document.getElementById('txtC') as HTMLInputElement;
 const tablaNumeros: HTMLTableElement = document.getElementById('tablaNumeros') as HTMLTableElement;
+const tablaChi: HTMLTableElement = document.getElementById('tablaChi') as HTMLTableElement;
 
+let randoms: number[];
 
 
 txtK.addEventListener('input', calcularA)
@@ -38,6 +42,7 @@ function calcularG() {
 }
 
 btnLineal.addEventListener('click', async e => {
+    randoms = [];
     limpiarTabla();
     // Si alguno de los parámetros no es ingresado por el usuario, se rechaza lapetición.
     if (txtMuestra.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
@@ -55,12 +60,14 @@ btnLineal.addEventListener('click', async e => {
         const rndsLineal: number[][] =
             await generadorLineal.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
         for (let i = 0; i < rndsLineal.length; i++) {
-            agregarDatos(rndsLineal[i])
+            randoms.push(rndsLineal[i][2]);
+            agregarDatos(rndsLineal[i]);
         }
     }
 })
 
 btnMultiplicativo.addEventListener('click', async e => {
+    randoms = [];
     limpiarTabla();
 
     // Si alguno de los parámetros no es ingresado por el usuario, se rechaza lapetición.
@@ -80,6 +87,7 @@ btnMultiplicativo.addEventListener('click', async e => {
         const rndsMultiplicativo: number[][] =
             await generadorMultiplicativo.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
         for (let i = 0; i < rndsMultiplicativo.length; i++) {
+            randoms.push(rndsMultiplicativo[i][2]);
             agregarDatos(rndsMultiplicativo[i])
         }
     }
@@ -88,6 +96,14 @@ btnMultiplicativo.addEventListener('click', async e => {
 btnLimpiar.addEventListener('click', () => {
     limpiarTabla();
     limpiarParametros();
+})
+
+btnPrueba.addEventListener('click', () => {
+    let prueba: TestChiCuadrado = new TestChiCuadrado();
+    prueba.pruebaChi(5, randoms);
+    for (let i = 0; i < prueba.tabla.length; i++) {
+        agregarDatosChi(prueba.tabla[i])
+    }
 })
 
 function limpiarParametros() {
@@ -109,6 +125,14 @@ function limpiarTabla() {
 function agregarDatos(vec: number[]){
     let fila = tablaNumeros.insertRow();
     for (let i: number = 0; i < 3; i++) {
+        let celda = fila.insertCell();
+        celda.appendChild(document.createTextNode(String(vec[i])));
+    }
+}
+
+function agregarDatosChi(vec: string[]){
+    let fila = tablaChi.insertRow();
+    for (let i: number = 0; i < 5; i++) {
         let celda = fila.insertCell();
         celda.appendChild(document.createTextNode(String(vec[i])));
     }
