@@ -65,7 +65,8 @@
     type="text"
     id="txtM"
     name="txtM"
-    placeholder=""
+    value="2ᵍ = "
+    disabled
     />
     </div>
     <div class="mb-3">
@@ -91,21 +92,34 @@
   <table id="tablaNumeros" class="table">
     <tr>
       <th>i</th>
-      <th>Xi+1</th>
-      <th>RND</th>
+      <th>X<sub>i+1</sub></th>
+      <th>RND = X<sub>i+1</sub> / m</th>
     </tr>
   </table>
 </div>
 
-<button id="btnPrueba" type="button" name="btnPrueba">
+<hr>
+<h1>Prueba Chi Cuadrado</h1>
+<div class="mb-3">
+    <label for="cboCantIntervalos">Seleccione la cantidad de intervalos:</label>
+    <select class="form-select" id="cboCantIntervalos">
+        <option value="0" selected>Seleccione un valor</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+    </select>
+</div>
+
+
+<button id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
   Prueba Chi Cuadrado
 </button>
 <div>
-  <table id="tablaChi" class="table">
+  <table id="tablaChiCuadrado" class="table">
     <tr>
       <th>Intervalo</th>
-      <th>Fo</th>
-      <th>Fe</th>
+      <th>F<sub>o</sub></th>
+      <th>F<sub>e</sub></th>
       <th>C</th>
       <th>C Acu</th>
     </tr>

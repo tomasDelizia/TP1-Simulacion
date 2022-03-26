@@ -5,14 +5,17 @@ import { GeneradorNumeros } from './GeneradorNumeros';
 import './style.css';
 import { TestChiCuadrado } from './TestChiCuadrado';
 
-const generadorLineal: GeneradorNumeros = new GeneradorLineal();
-const generadorMultiplicativo: GeneradorNumeros = new GeneradorMultiplicativo();
+// El generador de números aleatorios.
+let generador: GeneradorNumeros;
+
+// El test de Chi Cuadrado.
+let testChiCuadrado: TestChiCuadrado = new TestChiCuadrado();
 
 // Definición de botones de la interfaz de usuario.
 const btnLineal: HTMLButtonElement = document.getElementById('btnLineal') as HTMLButtonElement;
 const btnMultiplicativo: HTMLButtonElement = document.getElementById('btnMultiplicativo') as HTMLButtonElement;
 const btnLimpiar: HTMLButtonElement = document.getElementById('btnLimpiar') as HTMLButtonElement;
-const btnPrueba: HTMLButtonElement = document.getElementById('btnPrueba') as HTMLButtonElement;
+const btnPruebaChiCuadrado: HTMLButtonElement = document.getElementById('btnPruebaChiCuadrado') as HTMLButtonElement;
 const btnGenerarGrafico: HTMLButtonElement = document.getElementById('btnGenerarGrafico') as HTMLButtonElement;
 
 // Definición de los cuadros de texto de la interfaz de usuario.
@@ -26,22 +29,22 @@ const txtC: HTMLInputElement = document.getElementById('txtC') as HTMLInputEleme
 
 // Definición de las tablas de la interfaz de usuario.
 const tablaNumeros: HTMLTableElement = document.getElementById('tablaNumeros') as HTMLTableElement;
-const tablaChi: HTMLTableElement = document.getElementById('tablaChi') as HTMLTableElement;
+const tablaChiCuadrado: HTMLTableElement = document.getElementById('tablaChiCuadrado') as HTMLTableElement;
+
+// Definición del combo box para seleccionar la cantidad de intervalos.
+const cboCantIntervalos: HTMLSelectElement = document.getElementById('cboCantIntervalos') as HTMLSelectElement;
 
 // Definición del histograma de frecuencias.
 const histograma: HTMLCanvasElement = document.getElementById('histograma') as HTMLCanvasElement;
+
+
 
 const ResultHipotesis: HTMLInputElement = document.getElementById('ResultHipotesis') as HTMLInputElement;
 
 let randoms: number[];
 let frec: string[];
 
-// Observador que alerta al usuario de un valor incorrecto del parámetro N.
-txtMuestra.addEventListener('input', () => {
-    if (Number(txtMuestra.value) < 0)
-        alert('El valor de la muestra debe ser mayor a cero')
-});
-
+// Detecta que el valor de K es ingresado por teclado y calcula A.
 txtK.addEventListener('input', calcularA)
 
 // Función que calcula el valor de A y lo muestra por pantalla.
@@ -50,71 +53,76 @@ function calcularA(): void {
     txtA.value = '1 + 4k = ' + a;
 }
 
-txtG.addEventListener('input', calcularG)
+// Detecta que el valor de G es ingresado por teclado y calcula M.
+txtG.addEventListener('input', calcularG);
 
-function calcularG() {
-    let m: number =  Math.pow(2, Number(txtG.value));
-    txtM.value = '2' + 'm&supg;' + ' = ' + m;
+// Función que calcula el valor de G y lo muestra por pantalla.
+function calcularG(): void {
+    let g: number = Math.pow(2, Number(txtG.value));
+    txtM.value = "2ᵍ = " + g;
 }
 
-btnLineal.addEventListener('click', async e => {
-    randoms = [];
+btnLineal.addEventListener('click', async () => {
+    // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaNumeros);
-    // Si alguno de los parámetros no es ingresado por el usuario, se rechaza lapetición.
+    // Iniciamos el generador de números pseudoaleatorios.
+    generador = new GeneradorLineal();
+    // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
     if (txtMuestra.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
         alert('Tiene que ingresar todos los parámetros.');
     }
     else {
-        let muestra: number = Number(txtMuestra.value);
-        let semilla: number = Number(txtSemilla.value);
-        let k: number = Number(txtK.value);
-        let g: number = Number(txtG.value);
-        let c: number = Number(txtC.value);
-
+        const muestra: number = Number(txtMuestra.value);
+        const semilla: number = Number(txtSemilla.value);
+        const k: number = Number(txtK.value);
+        const g: number = Number(txtG.value);
+        const c: number = Number(txtC.value);
         const a: number = 1 + 4 * k;
         const m: number = Math.pow(2, g);
-        const rndsLineal: number[][] =
-            await generadorLineal.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
-        for (let i = 0; i < rndsLineal.length; i++) {
-            randoms.push(rndsLineal[i][2]);
-            agregarDatos(rndsLineal[i]);
+        await generador.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
+        let enteros: number[] = generador.getEnteros();
+        let rnds: number[] = generador.getRnds();
+        for (let i: number = 0; i < enteros.length; i++) {
+            agregarDatosTablaNumeros([i, enteros[i], rnds[i]]);
         }
     }
 })
 
 btnMultiplicativo.addEventListener('click', async e => {
-    randoms = [];
+    // Mostramos el valor del parámetro c como 0.
+    txtC.value = '0';
+    // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaNumeros);
-
-    // Si alguno de los parámetros no es ingresado por el usuario, se rechaza lapetición.
+    // Iniciamos el generador de números pseudoaleatorios.
+    generador = new GeneradorMultiplicativo();
+    // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
     if (txtMuestra.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "") {
-        alert('Tiene que ingresar todos los parámetros.');
+        alert('Tiene que ingresar todos los parámetros (excepto C).');
     }
     else {
-        console.log(txtMuestra.value)
-        let muestra: number = Number(txtMuestra.value);
-        let semilla: number = Number(txtSemilla.value);
-        let k: number = Number(txtK.value);
-        let g: number = Number(txtG.value);
-        let c: number = 0;
-
+        const muestra: number = Number(txtMuestra.value);
+        const semilla: number = Number(txtSemilla.value);
+        const k: number = Number(txtK.value);
+        const g: number = Number(txtG.value);
+        const c: number = 0;
         const a: number = 3 + 8 * k;
         const m: number = Math.pow(2, g);
-        const rndsMultiplicativo: number[][] =
-            await generadorMultiplicativo.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
-        for (let i = 0; i < rndsMultiplicativo.length; i++) {
-            randoms.push(rndsMultiplicativo[i][2]);
-            agregarDatos(rndsMultiplicativo[i])
+        await generador.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
+        let enteros: number[] = generador.getEnteros();
+        let rnds: number[] = generador.getRnds();
+        for (let i: number = 0; i < enteros.length; i++) {
+            agregarDatosTablaNumeros([i, enteros[i], rnds[i]]);
         }
     }
 })
 
+// Limpia la tabla y los parámetros ingresados al tocar el botón Limpiar.
 btnLimpiar.addEventListener('click', () => {
     limpiarTabla(tablaNumeros);
     limpiarParametros();
 })
 
-btnPrueba.addEventListener('click', () => {
+btnPruebaChiCuadrado.addEventListener('click', () => {
     frec = [];
     let prueba: TestChiCuadrado = new TestChiCuadrado();
     let numeros: number[] = [
@@ -123,11 +131,12 @@ btnPrueba.addEventListener('click', () => {
     prueba.pruebaChi(5, numeros);
     for (let i = 0; i < prueba.getTabla().length; i++) {
         frec.push(prueba.getTabla()[i][1]);
-        agregarDatosChi(prueba.getTabla()[i])
+        agregarDatosTablaChi(prueba.getTabla()[i])
     } 
 })
 
-function limpiarParametros() {
+// Función que borra los parámetros ingresados por el usuario.
+function limpiarParametros(): void {
     txtA.value = '';
     txtC.value = '';
     txtG.value = '';
@@ -135,15 +144,18 @@ function limpiarParametros() {
     txtM.value = '';
     txtMuestra.value = '';
     txtSemilla.value = '';
+    cboCantIntervalos.value = "0";
 }
 
+// Función que elimina todas las filas de la tabla HTML excepto los encabezados.
 function limpiarTabla(tabla: HTMLTableElement) {
     for(let i: number = tablaNumeros.rows.length; i > 1; i--) {
         tabla.deleteRow(i - 1);
     }
 }
 
-function agregarDatos(vec: number[]){
+// Función que
+function agregarDatosTablaNumeros(vec: number[]){
     let fila = tablaNumeros.insertRow();
     for (let i: number = 0; i < 3; i++) {
         let celda = fila.insertCell();
@@ -151,8 +163,8 @@ function agregarDatos(vec: number[]){
     }
 }
 
-function agregarDatosChi(vec: string[]){
-    let fila = tablaChi.insertRow();
+function agregarDatosTablaChi(vec: string[]){
+    let fila = tablaChiCuadrado.insertRow();
     for (let i: number = 0; i < 5; i++) {
         let celda = fila.insertCell();
         celda.appendChild(document.createTextNode(String(vec[i])));
