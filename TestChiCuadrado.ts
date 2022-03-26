@@ -6,7 +6,7 @@ export class TestChiCuadrado {
     32.671, 33.924, 35.172, 36.415, 37.652, 38.885, 40.113, 41.337, 42.557, 43.773,
   ];
   private v: number;
-  public tabla: string[][];
+  private tabla: string[][];
   private estadisticoAcum: number
 
   public pruebaChi(cantIntervalos: number, rnds: number[]): number {
@@ -47,5 +47,8 @@ export class TestChiCuadrado {
     if(this.estadisticoAcum > this.tablaChiCuadrado[this.v-1])
       return false
   }
-}
 
+  public getTabla(): string[][] {
+    return this.tabla;
+  }
+}

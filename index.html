@@ -1,55 +1,121 @@
 <div id="app"></div>
 
-<div class="input-group mb-3">
-    <label for="txtMuestra">Cantidad numeros:</label>
-    <input type="number" id="txtMuestra" name="txtMuestra"><br>
-</div>
-<div class="input-group mb-3">
-    <label for="txtSemilla">Semilla:</label>
-    <input type="number" id="txtSemilla" name="txtSemilla"><br>
-</div>
-<div class="input-group mb-3">
-    <label for="txtK">K:</label>
-    <input type="number" id="txtK" name="txtK"><br>
-    <label for="txtA">A:</label>
-    <input disabled type="text" id="txtA" name="txtA"><br>
-</div>
-<div class="input-group mb-3">
-    <label for="txtG">G:</label>
-    <input type="number" id="txtG" name="txtG"><br>
-    <label for="txtM">M:</label>
-    <input disabled type="text" id="txtM" name="txtM"><br>
-</div>
-<div class="input-group mb-3">
-    <label for="txtC">C:</label>
-    <input type="number" id="txtC" name="txtC"><br>
-</div>
+<h1>Trabajo Práctico N° 1 de Simulación</h1>
 
-<button  id="btnLineal" type="button" name="btnLineal">Método Lineal</button>
-<button id="btnMultiplicativo" type="button" name="btnMultiplicativo">Método Multiplicativo</button>
+<form action="post" class="mx-3">
+    <div class="row mb-3 mx-3">
+        <div class="col">
+            <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+        </div>
+    </div>
+
+    <div class="row mb-3 mx-3">
+        <div class="col">
+            <label class="control-label" for="txtMuestra">Tamaño de la muestra:</label>
+            <input
+            class="form-control form-control-sm"
+            type="number"
+            id="txtMuestra"
+            name="txtMuestra"
+            />
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+    <label class="form-label" for="txtSemilla">Semilla:</label>
+    <input
+    class="form-control form-control-sm"
+    type="number"
+    id="txtSemilla"
+    name="txtSemilla"
+    />
+    </div>
+    <div class="mb-3">
+    <label class="form-label" for="txtK">K:</label>
+    <input
+    class="form-control form-control-sm"
+    type="number"
+    id="txtK"
+    name="txtK"
+    />
+    <label class="form-label" for="txtA">A:</label>
+    <input
+    class="form-control form-control-sm"
+    disabled
+    type="text"
+    id="txtA"
+    name="txtA"
+    />
+    </div>
+    <div class="mb-3">
+    <label class="form-label" for="txtG">G:</label>
+    <input
+    class="form-control form-control-sm"
+    type="number"
+    id="txtG"
+    name="txtG"
+    />
+    <label class="form-label" for="txtM">M:</label>
+    <input
+    class="form-control-plaintext"
+    readonly
+    type="text"
+    id="txtM"
+    name="txtM"
+    placeholder=""
+    />
+    </div>
+    <div class="mb-3">
+    <label class="form-label" for="txtC">C:</label>
+    <input
+    class="form-control form-control-sm"
+    type="number"
+    id="txtC"
+    name="txtC"
+    />
+    </div>
+</form>
+
+
+
+<button id="btnLineal" type="button" name="btnLineal">Método Lineal</button>
+<button id="btnMultiplicativo" type="button" name="btnMultiplicativo">
+  Método Multiplicativo
+</button>
 <button id="btnLimpiar" type="button" name="btnLimpiar">Limpiar</button>
 
 <div>
-    <table id="tablaNumeros" class="table">
-        <tr>
-            <th>i</th>
-            <th>Xi+1</th>
-            <th>RND</th>
-        </tr>
-    </table>
+  <table id="tablaNumeros" class="table">
+    <tr>
+      <th>i</th>
+      <th>Xi+1</th>
+      <th>RND</th>
+    </tr>
+  </table>
 </div>
 
-<button id="btnPrueba" type="button" name="btnPrueba">Prueba Chi Cuadrado</button>
+<button id="btnPrueba" type="button" name="btnPrueba">
+  Prueba Chi Cuadrado
+</button>
 <div>
-    <table id="tablaChi" class="table">
-        <tr>
-            <th>Intervalo</th>
-            <th>Fo</th>
-            <th>Fe</th>
-            <th>C</th>
-            <th>C Acu</th>
-        </tr>
-    </table>
+  <table id="tablaChi" class="table">
+    <tr>
+      <th>Intervalo</th>
+      <th>Fo</th>
+      <th>Fe</th>
+      <th>C</th>
+      <th>C Acu</th>
+    </tr>
+  </table>
 </div>
 <label for="ResultHipotesis">H:</label>
-<input disabled type="text" id="ResultHipotesis" name="ResultHipotesis"><br>
+<input disabled type="text" id="ResultHipotesis" name="ResultHipotesis" /><br />
+
+<button id="btnGenerarGrafico" type="button" name="btnGenerarGrafico">
+  Grafico
+</button>
+
+<canvas id="histograma" width="40" height="40"></canvas>
