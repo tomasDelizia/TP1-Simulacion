@@ -38,11 +38,7 @@ const cboCantIntervalos: HTMLSelectElement = document.getElementById('cboCantInt
 const histograma: HTMLCanvasElement = document.getElementById('histograma') as HTMLCanvasElement;
 
 
-
 const ResultHipotesis: HTMLInputElement = document.getElementById('ResultHipotesis') as HTMLInputElement;
-
-let randoms: number[];
-let frec: string[];
 
 // Detecta que el valor de K es ingresado por teclado y calcula A.
 txtK.addEventListener('input', calcularA)
@@ -62,6 +58,7 @@ function calcularG(): void {
     txtM.value = "2ᵍ = " + g;
 }
 
+// Dispara la generación de números pseudoaleatorios por el Método Congruencial Lineal.
 btnLineal.addEventListener('click', async () => {
     // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaNumeros);
@@ -80,14 +77,14 @@ btnLineal.addEventListener('click', async () => {
         const a: number = 1 + 4 * k;
         const m: number = Math.pow(2, g);
         await generador.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
-        let enteros: number[] = generador.getEnteros();
-        let rnds: number[] = generador.getRnds();
-        for (let i: number = 0; i < enteros.length; i++) {
-            agregarDatosTablaNumeros([i, enteros[i], rnds[i]]);
+        for (let i: number = 0; i < generador.getEnteros().length; i++) {
+            agregarFilaATabla(
+                [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
         }
     }
 })
 
+// Dispara la generación de números pseudoaleatorios por el Método Congruencial Multiplicativo.
 btnMultiplicativo.addEventListener('click', async e => {
     // Mostramos el valor del parámetro c como 0.
     txtC.value = '0';
@@ -108,10 +105,9 @@ btnMultiplicativo.addEventListener('click', async e => {
         const a: number = 3 + 8 * k;
         const m: number = Math.pow(2, g);
         await generador.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
-        let enteros: number[] = generador.getEnteros();
-        let rnds: number[] = generador.getRnds();
-        for (let i: number = 0; i < enteros.length; i++) {
-            agregarDatosTablaNumeros([i, enteros[i], rnds[i]]);
+        for (let i: number = 0; i < generador.getEnteros().length; i++) {
+            agregarFilaATabla(
+                [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
         }
     }
 })
@@ -122,17 +118,21 @@ btnLimpiar.addEventListener('click', () => {
     limpiarParametros();
 })
 
-btnPruebaChiCuadrado.addEventListener('click', () => {
-    frec = [];
-    let prueba: TestChiCuadrado = new TestChiCuadrado();
-    let numeros: number[] = [
-        0.15, 0.22 , 0.41 , 0.65 , 0.84 , 0.81 , 0.62 , 0.45 , 0.32 , 0.07 , 0.11 , 0.29 , 0.58 , 0.73 , 0.93 , 0.97 , 0.79 , 0.55, 0.35 , 0.09 , 0.99 , 0.51 , 0.35 , 0.02 , 0.19 , 0.24 , 0.98 , 0.10 , 0.31 , 0.17 
-      ];
-    prueba.pruebaChi(5, numeros);
-    for (let i = 0; i < prueba.getTabla().length; i++) {
-        frec.push(prueba.getTabla()[i][1]);
-        agregarDatosTablaChi(prueba.getTabla()[i])
-    } 
+// Dispara la prueba de Chi Cuadrado.
+btnPruebaChiCuadrado.addEventListener('click', async () => {
+    const cantIntervalos: number = Number(cboCantIntervalos.value);
+    if (cboCantIntervalos.value == '0')
+        alert('Seleccione una cantidad de intervalos válida.');
+    else {
+        let numeros: number[] = [
+            0.15, 0.22 , 0.41 , 0.65 , 0.84 , 0.81 , 0.62 , 0.45 , 0.32 , 0.07 , 0.11 , 0.29 , 0.58 , 0.73 , 0.93 , 0.97 , 0.79 , 0.55, 0.35 , 0.09 , 0.99 , 0.51 , 0.35 , 0.02 , 0.19 , 0.24 , 0.98 , 0.10 , 0.31 , 0.17 
+          ];
+        // await testChiCuadrado.pruebaChiCuadrado(cantIntervalos, generador.getRnds());  
+        await testChiCuadrado.pruebaChiCuadrado(5, numeros);
+        for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
+            agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
+        }
+    }
 })
 
 // Función que borra los parámetros ingresados por el usuario.
@@ -154,37 +154,28 @@ function limpiarTabla(tabla: HTMLTableElement) {
     }
 }
 
-// Función que
-function agregarDatosTablaNumeros(vec: number[]){
-    let fila = tablaNumeros.insertRow();
-    for (let i: number = 0; i < 3; i++) {
-        let celda = fila.insertCell();
-        celda.appendChild(document.createTextNode(String(vec[i])));
+// Agregar una fila a una tabla html a partir de un vector pasado por parámetro.
+function agregarFilaATabla(fila: any[], tabla: HTMLTableElement) {
+    let filaHTML: HTMLTableRowElement = tabla.insertRow();
+    for (let i: number = 0; i < fila.length; i++) {
+        let celda = filaHTML.insertCell();
+        celda.appendChild(document.createTextNode(String(fila[i])));
     }
 }
 
-function agregarDatosTablaChi(vec: string[]){
-    let fila = tablaChiCuadrado.insertRow();
-    for (let i: number = 0; i < 5; i++) {
-        let celda = fila.insertCell();
-        celda.appendChild(document.createTextNode(String(vec[i])));
-    }
-}
+// Dispara la generación del histograma.
+btnGenerarGrafico.addEventListener('click', generarGrafico);
 
-btnGenerarGrafico.addEventListener('click', async e => {
-    datosGrafico();
-})
-
-function datosGrafico() {
-    console.log(frec)
+// Función que genera el histograma de frecuencias a partir de la serie de números pseudoaleatorios producida.
+function generarGrafico(): void {
     var ctx= histograma.getContext("2d");
-    var myCharte= new Chart(ctx,{
-        type:"bar",
-        data:{
-            labels:['col1','col2','col3', 'col4', 'col5'],
+    var grafico = new Chart(ctx,{
+        type: 'bar',
+        data: {
+            labels: testChiCuadrado.getIntervalos(),
             datasets:[{
                 label:'Num datos',
-                data:frec,
+                data: testChiCuadrado.getFrecuenciasObservadas(),
                 backgroundColor:[
                     'rgb(66, 134, 244,0.5)',
                     'rgb(74, 135, 72,0.5)',
