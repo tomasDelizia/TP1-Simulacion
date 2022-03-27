@@ -1,6 +1,6 @@
 <div id="app"></div>
 
-<h1>Trabajo Práctico N° 1 de Simulación</h1>
+<h1 class="text-center">Trabajo Práctico N° 1 de Simulación</h1>
 
 <form action="post">
 
@@ -110,19 +110,19 @@
 </div>
 
 <hr>
-<h1>Prueba Chi Cuadrado</h1>
+<h1 class="text-center">Prueba Chi Cuadrado</h1>
 
 <form action="post">
     <div class="row mb-3 mx-3">
         <label for="cboCantIntervalos">Seleccione la cantidad de intervalos:</label>
-        <select class="form-select mb-3" id="cboCantIntervalos">
+        <select disabled class="form-select mb-3" id="cboCantIntervalos">
             <option value="0" selected>Seleccione un valor</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>
         </select>
 
-        <button class="btn btn-dark" id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
+        <button disabled class="btn btn-dark" id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
         Prueba Chi Cuadrado
         </button>
     </div>
@@ -141,13 +141,20 @@
 </div>
 
 <div class="mb-3 mx-3 row">
-    <label for="ResultHipotesis">H:</label>
-    <input disabled type="text" id="ResultHipotesis" name="ResultHipotesis" />
+    <label for="txtResultHipotesis">Resultado:</label>
+    <textarea class='form-control-plaintext'disabled id="txtResultHipotesis" name="txtResultHipotesis" id="" cols="30" rows="5"></textarea>
 </div>
 
+<form action="post">
+    <div class="row mb-3 mx-3">
 
-<button class="btn btn-dark" id="btnGenerarGrafico" type="button" name="btnGenerarGrafico">
-  Generar histograma
-</button>
+        <button disabled class="btn btn-dark" id="btnGenerarGrafico" type="button" name="btnGenerarGrafico">
+        Generar histograma
+        </button>
 
-<canvas id="histograma" width="10" height="10"></canvas>
+        <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+            <canvas id="histograma"></canvas>
+        </div>  
+        
+    </div>
+</form>

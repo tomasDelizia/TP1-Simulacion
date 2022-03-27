@@ -38,10 +38,13 @@ export class TestChiCuadrado {
     console.log(this.getValoresIntervalos());
   }
 
-  public validarHipotesis(): boolean {
+  public validarHipotesis(): string {
+    const estadisticoTab: number = this.tablaChiCuadrado[this.v-1];
     // Si el estadistico calculado es mayor al tabulado, se rechaza la hipótesis nula.
-    if(this.estadisticoAcum > this.tablaChiCuadrado[this.v-1])
-      return false
+    if (this.estadisticoAcum > estadisticoTab)
+      return 'Ya que el estadístico calculado es mayor al estadístico tabulado (' + this.estadisticoAcum.toFixed(4) + ' > ' + estadisticoTab + '), se procede a rechazar la hipótesis nula.';
+    else
+      return 'Ya que el estadístico calculado es menor o igual al estadístico tabulado (' + this.estadisticoAcum.toFixed(4) + ' <= ' + estadisticoTab + '), no se puede a rechazar la hipótesis nula.';
   }
 
   public getTabla(): string[][] {
@@ -65,6 +68,14 @@ export class TestChiCuadrado {
       limSup = Number((limInf + ancho).toFixed(2));
       intervalos.push(limSup);
       limInf = limSup;
+    }
+    return intervalos;
+  }
+
+  public getIntervalos(): string[] {
+    let intervalos: string[] = [];
+    for (let i: number = 0; i < this.tabla.length; i++) {
+      intervalos.push(this.tabla[i][0]);
     }
     return intervalos;
   }

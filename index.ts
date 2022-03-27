@@ -4,7 +4,6 @@ import { GeneradorMultiplicativo } from './GeneradorMultiplicativo';
 import { GeneradorNumeros } from './GeneradorNumeros';
 import './style.css';
 import { TestChiCuadrado } from './TestChiCuadrado';
-import * as grafico from './grafico';
 
 // El generador de números aleatorios.
 let generador: GeneradorNumeros;
@@ -27,6 +26,7 @@ const txtK: HTMLInputElement = document.getElementById('txtK') as HTMLInputEleme
 const txtG: HTMLInputElement = document.getElementById('txtG') as HTMLInputElement;
 const txtM: HTMLInputElement = document.getElementById('txtM') as HTMLInputElement;
 const txtC: HTMLInputElement = document.getElementById('txtC') as HTMLInputElement;
+const txtResultHipotesis: HTMLTextAreaElement = document.getElementById('txtResultHipotesis') as HTMLTextAreaElement;
 
 // Definición de las tablas de la interfaz de usuario.
 const tablaNumeros: HTMLTableElement = document.getElementById('tablaNumeros') as HTMLTableElement;
@@ -37,9 +37,8 @@ const cboCantIntervalos: HTMLSelectElement = document.getElementById('cboCantInt
 
 // Definición del histograma de frecuencias.
 const histograma: HTMLCanvasElement = document.getElementById('histograma') as HTMLCanvasElement;
-
-
-const ResultHipotesis: HTMLInputElement = document.getElementById('ResultHipotesis') as HTMLInputElement;
+const areaHistograma = histograma.getContext('2d');
+let grafico: Chart;
 
 // Detecta que el valor de K es ingresado por teclado y calcula A.
 txtK.addEventListener('input', calcularA)
@@ -82,6 +81,8 @@ btnLineal.addEventListener('click', async () => {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
         }
+        cboCantIntervalos.disabled = false;
+        btnPruebaChiCuadrado.disabled = false;
     }
 })
 
@@ -116,7 +117,13 @@ btnMultiplicativo.addEventListener('click', async e => {
 // Limpia la tabla y los parámetros ingresados al tocar el botón Limpiar.
 btnLimpiar.addEventListener('click', () => {
     limpiarTabla(tablaNumeros);
+    limpiarTabla(tablaChiCuadrado);
     limpiarParametros();
+    cboCantIntervalos.disabled = true;
+    btnPruebaChiCuadrado.disabled = true;
+    btnGenerarGrafico.disabled = true;
+    if (grafico != null)
+        grafico.destroy();
 })
 
 // Dispara la prueba de Chi Cuadrado.
@@ -125,27 +132,26 @@ btnPruebaChiCuadrado.addEventListener('click', async () => {
     if (cboCantIntervalos.value == '0')
         alert('Seleccione una cantidad de intervalos válida.');
     else {
-        let numeros: number[] = [
-            0.15, 0.22 , 0.41 , 0.65 , 0.84 , 0.81 , 0.62 , 0.45 , 0.32 , 0.07 , 0.11 , 0.29 , 0.58 , 0.73 , 0.93 , 0.97 , 0.79 , 0.55, 0.35 , 0.09 , 0.99 , 0.51 , 0.35 , 0.02 , 0.19 , 0.24 , 0.98 , 0.10 , 0.31 , 0.17 
-          ];
-        // await testChiCuadrado.pruebaChiCuadrado(cantIntervalos, generador.getRnds());  
-        await testChiCuadrado.pruebaChiCuadrado(5, numeros);
+        await testChiCuadrado.pruebaChiCuadrado(cantIntervalos, generador.getRnds());
         for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
             agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
         }
+        txtResultHipotesis.value = testChiCuadrado.validarHipotesis();
+        btnGenerarGrafico.disabled = false;
     }
 })
 
 // Función que borra los parámetros ingresados por el usuario.
 function limpiarParametros(): void {
-    txtA.value = '';
+    txtA.value = '1 + 4k = ';
     txtC.value = '';
     txtG.value = '';
     txtK.value = '';
-    txtM.value = '';
+    txtM.value = '2ᵍ = ';
     txtMuestra.value = '';
     txtSemilla.value = '';
     cboCantIntervalos.value = "0";
+    txtResultHipotesis.value = "";
 }
 
 // Función que elimina todas las filas de la tabla HTML excepto los encabezados.
@@ -169,8 +175,22 @@ btnGenerarGrafico.addEventListener('click', generarGrafico);
 
 // Función que genera el histograma de frecuencias a partir de la serie de números pseudoaleatorios producida.
 function generarGrafico(): void {
-    var ctx = histograma.getContext('2d');
-    var dataValues = [12, 19, 3, 5];
-    var dataLabels = [0, 1, 2, 3, 4];
-    var myChart = dibujarGrafico(dataValues, dataLabels);
+    grafico = new Chart(areaHistograma, {
+        type:'bar',
+        data:{
+            labels: testChiCuadrado.getIntervalos(),
+            datasets:[{
+                label: 'Frecuencias observadas',
+                data: testChiCuadrado.getFrecuenciasObservadas(),
+                backgroundColor: 'rgb(66, 134, 244,0.5)'
+            }]
+        },
+        options:{
+            scales:{
+                yAxes:{
+                    beginAtZero:true
+                }
+            }
+        }
+    });
 }
