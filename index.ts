@@ -4,6 +4,7 @@ import { GeneradorMultiplicativo } from './GeneradorMultiplicativo';
 import { GeneradorNumeros } from './GeneradorNumeros';
 import './style.css';
 import { TestChiCuadrado } from './TestChiCuadrado';
+import * as grafico from './grafico';
 
 // El generador de números aleatorios.
 let generador: GeneradorNumeros;
@@ -168,27 +169,8 @@ btnGenerarGrafico.addEventListener('click', generarGrafico);
 
 // Función que genera el histograma de frecuencias a partir de la serie de números pseudoaleatorios producida.
 function generarGrafico(): void {
-    var ctx= histograma.getContext("2d");
-    var grafico = new Chart(ctx,{
-        type: 'bar',
-        data: {
-            labels: testChiCuadrado.getIntervalos(),
-            datasets:[{
-                label:'Num datos',
-                data: testChiCuadrado.getFrecuenciasObservadas(),
-                backgroundColor:[
-                    'rgb(66, 134, 244,0.5)',
-                    'rgb(74, 135, 72,0.5)',
-                    'rgb(229, 89, 50,0.5)'
-                ]
-            }]
-        },
-        options:{
-            scales:{
-                yAxes:{
-                    beginAtZero:true
-                }
-            }
-        }
-    });
+    var ctx = histograma.getContext('2d');
+    var dataValues = [12, 19, 3, 5];
+    var dataLabels = [0, 1, 2, 3, 4];
+    var myChart = dibujarGrafico(dataValues, dataLabels);
 }
