@@ -1,32 +1,160 @@
 <div id="app"></div>
 
-<fieldset name="datos">
-    <legend>Datos</legend>
-    <div>
-        <label for="txtMuestra">Cantidad numeros:</label>
-        <input type="number" id="txtMuestra" name="txtMuestra"><br>
-        <label for="txtSemilla">Semilla:</label>
-        <input type="number" id="txtSemilla" name="txtSemilla"><br>
-        <label for="txtK">K:</label>
-        <input type="number" id="txtK" name="txtK"><br>
-        <label for="txtA">A:</label>
-        <input disabled type="number" id="txtA" name="txtA"><br>
-        <label for="txtG">G:</label>
-        <input type="number" id="txtG" name="txtG"><br>
-        <label for="txtM">M:</label>
-        <input disabled type="number" id="txtM" name="txtM"><br>
-        <label for="txtC">C:</label>
-        <input type="number" id="txtC" name="txtC"><br>
+<h1 class="text-center">Trabajo Práctico N° 1 de Simulación</h1>
+
+<form action="post">
+
+    <div class="row mb-3 mx-3">
+        <div class="col">
+            <label class="control-label text-center" for="txtMuestra">Tamaño de la muestra:</label>
+            <input
+            class="form-control form-control-sm"
+            type="number"
+            id="txtMuestra"
+            name="txtMuestra"
+            />
+        </div>
     </div>
-</fieldset>
-<button class="btn btn-dark" id="btnLineal" type="submit" name="btnLineal">Método Lineal</button>
-<button id="btnMultiplicativo" type="submit" name="btnMultiplicativo">Método Multiplicativo</button>
+
+    <div class="row mb-3 mx-3">
+        <div class="col">
+            <label class="form-label" for="txtSemilla">Semilla:</label>
+            <input
+            class="form-control form-control-sm"
+            type="number"
+            id="txtSemilla"
+            name="txtSemilla"
+            />
+        </div>
+    </div>
+
+    <div class="row mb-3 mx-3">
+        <div class="col">
+            <label class="form-label" for="txtK">K:</label>
+            <input
+            class="form-control form-control-sm"
+            type="number"
+            id="txtK"
+            name="txtK"
+            />
+        </div>
+        <div class="col">
+            <label class="form-label" for="txtA">A:</label>
+            <input
+            class="form-control-plaintext"
+            disabled
+            readonly
+            type="text"
+            id="txtA"
+            name="txtA"
+            value="1 + 4k = "
+            />
+        </div>
+    </div>
+
+    <div class="row mb-3 mx-3">
+        <div class="col">
+            <label class="form-label" for="txtG">G:</label>
+            <input
+            class="form-control form-control-sm"
+            type="number"
+            id="txtG"
+            name="txtG"
+            />
+        </div>
+        <div class="col">
+            <label class="form-label" for="txtM">M:</label>
+            <input
+            class="form-control-plaintext"
+            readonly
+            type="text"
+            id="txtM"
+            name="txtM"
+            value="2ᵍ = "
+            disabled
+            />
+        </div>
+    </div>
+
+    <div class="row mb-3 mx-3">
+        <div class="col">
+            <label class="form-label" for="txtC">C:</label>
+            <input
+            class="form-control form-control-sm"
+            type="number"
+            id="txtC"
+            name="txtC"
+            />
+        </div>
+    </div>
+
+    <div class="row mb-3 mx-5">
+        <button class="btn btn-dark mb-2" id="btnLineal" type="button" name="btnLineal">Método Lineal</button>
+
+        <button class="btn btn-dark mb-2" id="btnMultiplicativo" type="button" name="btnMultiplicativo">
+        Método Multiplicativo
+        </button>
+
+        <button class="btn btn-dark mb-2" id="btnLimpiar" type="button" name="btnLimpiar">Limpiar</button>
+    </div>
+</form>
+
 <div>
-    <table id="tablaNumeros">
-        <tr>
-            <th>i</th>
-            <th>Xi+1</th>
-            <th>RND</th>
-        </tr>
-    </table>
+  <table id="tablaNumeros" class="table mx-3 mb-3">
+    <tr>
+      <th>i</th>
+      <th>X<sub>i+1</sub></th>
+      <th>RND = X<sub>i+1</sub> / m</th>
+    </tr>
+  </table>
 </div>
+
+<hr>
+<h1 class="text-center">Prueba Chi Cuadrado</h1>
+
+<form action="post">
+    <div class="row mb-3 mx-3">
+        <label for="cboCantIntervalos">Seleccione la cantidad de intervalos:</label>
+        <select disabled class="form-select mb-3" id="cboCantIntervalos">
+            <option value="0" selected>Seleccione un valor</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+
+        <button disabled class="btn btn-dark" id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
+        Prueba Chi Cuadrado
+        </button>
+    </div>
+</form>
+
+<div>
+  <table id="tablaChiCuadrado" class="table">
+    <tr>
+      <th>Intervalo</th>
+      <th>F<sub>o</sub></th>
+      <th>F<sub>e</sub></th>
+      <th>C</th>
+      <th>Σ C</th>
+    </tr>
+  </table>
+</div>
+
+<div class="mb-3 mx-3 row">
+    <label for="txtResultHipotesis">Resultado:</label>
+    <textarea class='form-control-plaintext'disabled id="txtResultHipotesis" name="txtResultHipotesis" id="" cols="30" rows="5"></textarea>
+</div>
+
+<form action="post">
+    <div class="row mb-3 mx-3">
+
+        <button disabled class="btn btn-dark" id="btnGenerarGrafico" type="button" name="btnGenerarGrafico">
+        Generar histograma
+        </button>
+
+        <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+            <canvas id="histograma"></canvas>
+        </div>  
+        
+    </div>
+</form>
