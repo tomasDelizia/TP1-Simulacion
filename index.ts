@@ -128,6 +128,8 @@ btnLimpiar.addEventListener('click', () => {
 
 // Dispara la prueba de Chi Cuadrado.
 btnPruebaChiCuadrado.addEventListener('click', async () => {
+    // Limpiamos la tabla para volver a llenarla.
+    limpiarTabla(tablaChiCuadrado);
     const cantIntervalos: number = Number(cboCantIntervalos.value);
     if (cboCantIntervalos.value == '0')
         alert('Seleccione una cantidad de intervalos válida.');
@@ -156,7 +158,7 @@ function limpiarParametros(): void {
 
 // Función que elimina todas las filas de la tabla HTML excepto los encabezados.
 function limpiarTabla(tabla: HTMLTableElement) {
-    for(let i: number = tablaNumeros.rows.length; i > 1; i--) {
+    for(let i: number = tabla.rows.length; i > 1; i--) {
         tabla.deleteRow(i - 1);
     }
 }
