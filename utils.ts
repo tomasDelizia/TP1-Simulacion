@@ -90,7 +90,7 @@ export function addInOrder(vec: number[], x: number, n: number = vec.length): nu
         izq = medio + 1;
   }
   if (izq > der)
-      pos = izq;
+      pos = izq; 
   vec.splice(pos, 0, x);
   return vec;
 }
