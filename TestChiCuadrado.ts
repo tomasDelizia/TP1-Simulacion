@@ -1,4 +1,4 @@
-import { contarEnRango, addInOrder, quickSort } from "./utils";
+import { contarEnRango, quickSort } from "./utils";
 
 export class TestChiCuadrado {
   // Tabla de distribución Chi Cuadrado con p = 0.95, para grados de libertad entre 1 y 30.
@@ -15,7 +15,6 @@ export class TestChiCuadrado {
 
   public async pruebaChiCuadrado(cantIntervalos: number, tamMuestra: number): Promise<any> {
     // Generamos la serie de números pseudoaleatorios utilizando el método provisto por el lenguaje.
-
     this.rnds = [];
     for (let i: number = 0; i < tamMuestra; i++) {
       let rnd: number = Number(Math.random().toFixed(4));

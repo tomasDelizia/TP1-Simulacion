@@ -1,22 +1,20 @@
-/**
- * Divide el vector e intercambia valores.
- *
- * @param {number[]} vec
- * @param {number} [izq=0]
- * @param {number} [der=array.length - 1]
- * @returns {number}
- */
- function partition(vec: number[], izq: number = 0, der: number = vec.length - 1): number {
-  const pivot: number = vec[Math.floor((der + izq) / 2)];
+function getPivot(vec: number[], izq: number, der: number): number {
+  return vec[Math.floor((der + izq) / 2)];
+}
+
+// Implementación del algoritmo QuickSort en Typescript.
+export function quickSort(vec: number[], izq: number = 0, der: number = vec.length - 1): number[] {
+  let pivot: number = getPivot(vec, izq, der);
+
   let i: number = izq;
   let j: number = der;
 
   while (i <= j) {
-    while (vec[i] < pivot) {
+    while (vec[i] < pivot && i < der) {
       i++;
     }
 
-    while (vec[j] > pivot) {
+    while (vec[j] > pivot && j > izq) {
       j--;
     }
 
@@ -27,29 +25,12 @@
     }
   }
 
-  return i;
-}
+  if (izq < j) {
+    quickSort(vec, izq, j);
+  }
 
-/**
- * Implementación Quicksort
- *
- * @param {number[]} vec
- * @param {number} [izq=0]
- * @param {number} [der=array.length - 1]
- * @returns {number[]}
- */
-export function quickSort(vec: number[], izq: number = 0, der: number = vec.length - 1): number[] {
-  let index: number;
-  if (vec.length > 1) {
-    index = partition(vec, izq, der);
-
-    if (izq < index - 1) {
-      quickSort(vec, izq, index - 1);
-    }
-
-    if (index < der) {
-      quickSort(vec, index, der);
-    }
+  if (i < der) {
+    quickSort(vec, i, der);
   }
   return vec;
 }
