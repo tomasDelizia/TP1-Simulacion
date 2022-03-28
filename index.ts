@@ -27,6 +27,8 @@ const txtG: HTMLInputElement = document.getElementById('txtG') as HTMLInputEleme
 const txtM: HTMLInputElement = document.getElementById('txtM') as HTMLInputElement;
 const txtC: HTMLInputElement = document.getElementById('txtC') as HTMLInputElement;
 const txtResultHipotesis: HTMLTextAreaElement = document.getElementById('txtResultHipotesis') as HTMLTextAreaElement;
+const txtMuestraChi: HTMLInputElement = document.getElementById('txtMuestraChi') as HTMLInputElement;
+
 
 // Definición de las tablas de la interfaz de usuario.
 const tablaNumeros: HTMLTableElement = document.getElementById('tablaNumeros') as HTMLTableElement;
@@ -81,8 +83,6 @@ btnLineal.addEventListener('click', async () => {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
         }
-        cboCantIntervalos.disabled = false;
-        btnPruebaChiCuadrado.disabled = false;
     }
 })
 
@@ -119,22 +119,26 @@ btnLimpiar.addEventListener('click', () => {
     limpiarTabla(tablaNumeros);
     limpiarTabla(tablaChiCuadrado);
     limpiarParametros();
-    cboCantIntervalos.disabled = true;
-    btnPruebaChiCuadrado.disabled = true;
     btnGenerarGrafico.disabled = true;
+    limpiarGrafico();
+})
+
+function limpiarGrafico(): void {
     if (grafico != null)
         grafico.destroy();
-})
+}
 
 // Dispara la prueba de Chi Cuadrado.
 btnPruebaChiCuadrado.addEventListener('click', async () => {
     // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaChiCuadrado);
+    limpiarGrafico();
     const cantIntervalos: number = Number(cboCantIntervalos.value);
+    const tamMuestra: number = Number(txtMuestraChi.value);
     if (cboCantIntervalos.value == '0')
         alert('Seleccione una cantidad de intervalos válida.');
     else {
-        await testChiCuadrado.pruebaChiCuadrado(cantIntervalos, generador.getRnds());
+        await testChiCuadrado.pruebaChiCuadrado(cantIntervalos, tamMuestra);
         for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
             agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
         }

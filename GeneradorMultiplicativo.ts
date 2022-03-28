@@ -15,7 +15,7 @@ export class GeneradorMultiplicativo implements GeneradorNumeros {
             // Obtenemos el xi.
             let xi: number = (a * semilla) % m;
             // Obtenemos el rnd.
-            let rnd: number = Number((xi / m-1).toPrecision(4));
+            let rnd: number = Number((xi / m).toPrecision(4));
             // Guardamos los elementos en sus respectivos vectores.
             this.secuenciaEnteros.push(xi);
             this.secuenciaRnds.push(rnd);

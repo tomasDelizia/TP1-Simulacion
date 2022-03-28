@@ -91,3 +91,25 @@ export function contarEnRango(vec: number[], limInf: number, limSup: number): nu
             indiceMenor(vec, limInf) + 1;
     return contador;
 }
+
+// Función que añade un elemento a un vector en orden.
+export function addInOrder(vec: number[], x: number, n: number = vec.length): number[] {
+  let izq: number = 0;
+  let der: number = n - 1;
+  let pos: number = n;
+  while (izq <= der) {
+    let medio: number = Math.floor((izq + der) / 2);
+    if (x == vec[medio]) {
+      pos = medio;
+      break;
+    }
+    if (x < vec[medio])
+        der = medio - 1;
+    else
+        izq = medio + 1;
+  }
+  if (izq > der)
+      pos = izq;
+  vec.splice(pos, 0, x);
+  return vec;
+}

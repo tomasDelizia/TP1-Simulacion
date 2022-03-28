@@ -1,4 +1,4 @@
-import { contarEnRango, quickSort } from "./utils";
+import { contarEnRango, addInOrder, quickSort } from "./utils";
 
 export class TestChiCuadrado {
   // Tabla de distribución Chi Cuadrado con p = 0.95, para grados de libertad entre 1 y 30.
@@ -11,19 +11,28 @@ export class TestChiCuadrado {
   private v: number;
   private tabla: string[][];
   private estadisticoAcum: number;
+  private rnds: number[];
 
-  public async pruebaChiCuadrado(cantIntervalos: number, rnds: number[]): Promise<any> {
+  public async pruebaChiCuadrado(cantIntervalos: number, tamMuestra: number): Promise<any> {
+    // Generamos la serie de números pseudoaleatorios utilizando el método provisto por el lenguaje.
+
+    this.rnds = [];
+    for (let i: number = 0; i < tamMuestra; i++) {
+      let rnd: number = Number(Math.random().toFixed(4));
+      this.rnds.push(rnd);
+    }
     // Ordenamos el vector de números aleatorios.
-    quickSort(rnds);
+    quickSort(this.rnds);
+
     let limInferior: number = 0;
     const anchoIntervalo: number = 1 / cantIntervalos;
-    const frecEsperada: number = rnds.length / cantIntervalos;
+    const frecEsperada: number = tamMuestra / cantIntervalos;
     this.estadisticoAcum = 0;
     this.tabla = [];
     this.v = cantIntervalos - 1;
     for (let i: number = 0; i < cantIntervalos; i++) {
       let limSuperior: number = limInferior + anchoIntervalo;
-      let frecObservada = contarEnRango(rnds, limInferior, limSuperior);
+      let frecObservada = contarEnRango(this.rnds, limInferior, limSuperior);
       let estadistico : number = (Math.pow((frecObservada-frecEsperada),2)) / frecEsperada;
       this.estadisticoAcum += estadistico;
       this.tabla.push([
@@ -35,7 +44,6 @@ export class TestChiCuadrado {
       ]);
       limInferior = limSuperior;
     }
-    console.log(this.getValoresIntervalos());
   }
 
   public validarHipotesis(): string {

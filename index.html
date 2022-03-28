@@ -2,6 +2,8 @@
 
 <h1 class="text-center">Trabajo Práctico N° 1 de Simulación</h1>
 
+<h2 class="mx-4">Ingrese los parámetros:</h2>
+
 <form action="post">
 
     <div class="row mb-3 mx-3">
@@ -78,7 +80,7 @@
 
     <div class="row mb-3 mx-3">
         <div class="col">
-            <label class="form-label" for="txtC">C:</label>
+            <label class="form-label" for="txtC">C (solo para Método Lineal):</label>
             <input
             class="form-control form-control-sm"
             type="number"
@@ -89,10 +91,10 @@
     </div>
 
     <div class="row mb-3 mx-5">
-        <button class="btn btn-dark mb-2" id="btnLineal" type="button" name="btnLineal">Método Lineal</button>
+        <button class="btn btn-dark mb-2" id="btnLineal" type="button" name="btnLineal">Método Congruencial Lineal</button>
 
         <button class="btn btn-dark mb-2" id="btnMultiplicativo" type="button" name="btnMultiplicativo">
-        Método Multiplicativo
+        Método Congruencial Multiplicativo
         </button>
 
         <button class="btn btn-dark mb-2" id="btnLimpiar" type="button" name="btnLimpiar">Limpiar</button>
@@ -114,15 +116,24 @@
 
 <form action="post">
     <div class="row mb-3 mx-3">
-        <label for="cboCantIntervalos">Seleccione la cantidad de intervalos:</label>
-        <select disabled class="form-select mb-3" id="cboCantIntervalos">
+
+        <label class="control-label" for="txtMuestraChi">Ingrese la cantidad de números a generar:</label>
+        <input
+        class="form-control form-control-sm"
+        type="number"
+        id="txtMuestraChi"
+        name="txtMuestraChi"
+        />
+        <label class="control-label" for="cboCantIntervalos">Seleccione la cantidad de intervalos:</label>
+        <select class="form-select mb-3" id="cboCantIntervalos">
             <option value="0" selected>Seleccione un valor</option>
             <option value="5">5</option>
+            <option value="8">8</option>
             <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="12">12</option>
         </select>
 
-        <button disabled class="btn btn-dark" id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
+        <button class="btn btn-dark" id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
         Prueba Chi Cuadrado
         </button>
     </div>
