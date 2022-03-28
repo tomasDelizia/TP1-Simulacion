@@ -45,6 +45,34 @@ export class TestChiCuadrado {
     }
   }
 
+  // Prueba de Chi cuadrado utilizando un vector de números pasado por parámetro.
+  public async pruebaChiCuadradoLineal(cantIntervalos: number, tamMuestra: number, rnds: number[]): Promise<any> {
+
+    // Ordenamos el vector de números aleatorios.
+    quickSort(rnds);
+
+    let limInferior: number = 0;
+    const anchoIntervalo: number = 1 / cantIntervalos;
+    const frecEsperada: number = tamMuestra / cantIntervalos;
+    this.estadisticoAcum = 0;
+    this.tabla = [];
+    this.v = cantIntervalos - 1;
+    for (let i: number = 0; i < cantIntervalos; i++) {
+      let limSuperior: number = limInferior + anchoIntervalo;
+      let frecObservada = contarEnRango(rnds, limInferior, limSuperior);
+      let estadistico : number = (Math.pow((frecObservada-frecEsperada),2)) / frecEsperada;
+      this.estadisticoAcum += estadistico;
+      this.tabla.push([
+        limInferior.toFixed(2) + ' - ' + limSuperior.toFixed(2),
+        frecObservada.toString(),
+        frecEsperada.toString(),
+        estadistico.toFixed(4).toString(),
+        this.estadisticoAcum.toFixed(4).toString(),
+      ]);
+      limInferior = limSuperior;
+    }
+  }
+
   public validarHipotesis(): string {
     const estadisticoTab: number = this.tablaChiCuadrado[this.v-1];
     // Si el estadistico calculado es mayor al tabulado, se rechaza la hipótesis nula.

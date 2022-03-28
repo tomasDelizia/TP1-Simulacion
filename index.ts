@@ -16,10 +16,10 @@ const btnLineal: HTMLButtonElement = document.getElementById('btnLineal') as HTM
 const btnMultiplicativo: HTMLButtonElement = document.getElementById('btnMultiplicativo') as HTMLButtonElement;
 const btnLimpiar: HTMLButtonElement = document.getElementById('btnLimpiar') as HTMLButtonElement;
 const btnPruebaChiCuadrado: HTMLButtonElement = document.getElementById('btnPruebaChiCuadrado') as HTMLButtonElement;
+const btnPruebaChiLineal: HTMLButtonElement = document.getElementById('btnPruebaChiLineal') as HTMLButtonElement;
 const btnGenerarGrafico: HTMLButtonElement = document.getElementById('btnGenerarGrafico') as HTMLButtonElement;
 
 // Definición de los cuadros de texto de la interfaz de usuario.
-const txtMuestra: HTMLInputElement = document.getElementById('txtMuestra') as HTMLInputElement;
 const txtSemilla: HTMLInputElement = document.getElementById('txtSemilla') as HTMLInputElement;
 const txtA: HTMLInputElement = document.getElementById('txtA') as HTMLInputElement;
 const txtK: HTMLInputElement = document.getElementById('txtK') as HTMLInputElement;
@@ -67,18 +67,17 @@ btnLineal.addEventListener('click', async () => {
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorLineal();
     // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
-    if (txtMuestra.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
-        alert('Tiene que ingresar todos los parámetros.');
+    if (txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
+        alert('Tiene que ingresar todos los parámetros necesarios.');
     }
     else {
-        const muestra: number = Number(txtMuestra.value);
         const semilla: number = Number(txtSemilla.value);
         const k: number = Number(txtK.value);
         const g: number = Number(txtG.value);
         const c: number = Number(txtC.value);
         const a: number = 1 + 4 * k;
         const m: number = Math.pow(2, g);
-        await generador.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
+        await generador.generarNumerosPseudoaleatorios(20, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
@@ -95,18 +94,17 @@ btnMultiplicativo.addEventListener('click', async e => {
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorMultiplicativo();
     // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
-    if (txtMuestra.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "") {
+    if (txtSemilla.value == "" || txtK.value == "" || txtG.value == "") {
         alert('Tiene que ingresar todos los parámetros (excepto C).');
     }
     else {
-        const muestra: number = Number(txtMuestra.value);
         const semilla: number = Number(txtSemilla.value);
         const k: number = Number(txtK.value);
         const g: number = Number(txtG.value);
         const c: number = 0;
         const a: number = 3 + 8 * k;
         const m: number = Math.pow(2, g);
-        await generador.generarNumerosPseudoaleatorios(muestra, semilla, a, m, c);
+        await generador.generarNumerosPseudoaleatorios(20, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
@@ -128,17 +126,39 @@ function limpiarGrafico(): void {
         grafico.destroy();
 }
 
-// Dispara la prueba de Chi Cuadrado.
+// Dispara la prueba de Chi Cuadrado usando el generador de JavaScript.
 btnPruebaChiCuadrado.addEventListener('click', async () => {
     // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaChiCuadrado);
     limpiarGrafico();
     const cantIntervalos: number = Number(cboCantIntervalos.value);
     const tamMuestra: number = Number(txtMuestraChi.value);
-    if (cboCantIntervalos.value == '0')
-        alert('Seleccione una cantidad de intervalos válida.');
+    if (cboCantIntervalos.value == '0' || txtMuestraChi.value == "")
+        alert('Ingrese los parámetros requeridos.');
     else {
         await testChiCuadrado.pruebaChiCuadrado(cantIntervalos, tamMuestra);
+        for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
+            agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
+        }
+        txtResultHipotesis.value = testChiCuadrado.validarHipotesis();
+        btnGenerarGrafico.disabled = false;
+    }
+})
+
+// Dispara la prueba de Chi Cuadrado usando el Generador Congruencial Mixto.
+btnPruebaChiLineal.addEventListener('click', async () => {
+    // Limpiamos la tabla para volver a llenarla.
+    limpiarTabla(tablaChiCuadrado);
+    limpiarGrafico();
+    const cantIntervalos: number = Number(cboCantIntervalos.value);
+    const tamMuestra: number = Number(txtMuestraChi.value);
+    if (cboCantIntervalos.value == '0' || txtMuestraChi.value == "")
+        alert('Ingrese los parámetros requeridos.');
+    else {
+        generador = new GeneradorLineal();
+        await generador.generarNumerosPseudoaleatorios(tamMuestra, 1, 1664525, 4294967296, 1013904223);
+        await testChiCuadrado.pruebaChiCuadradoLineal(cantIntervalos, tamMuestra, generador.getRnds());
+        console.log(testChiCuadrado.getTabla());
         for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
             agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
         }
@@ -154,7 +174,6 @@ function limpiarParametros(): void {
     txtG.value = '';
     txtK.value = '';
     txtM.value = '2ᵍ = ';
-    txtMuestra.value = '';
     txtSemilla.value = '';
     cboCantIntervalos.value = "0";
     txtResultHipotesis.value = "";

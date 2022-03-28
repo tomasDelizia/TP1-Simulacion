@@ -2,25 +2,15 @@
 
 <h1 class="text-center">Trabajo Práctico N° 1 de Simulación</h1>
 
-<h2 class="mx-4">Ingrese los parámetros:</h2>
+<h2 class="text-center">Generador de números pseudoaleatorios</h2>
+
+<h3 class="mx-4">Ingrese los parámetros:</h3>
 
 <form action="post">
 
     <div class="row mb-3 mx-3">
         <div class="col">
-            <label class="control-label text-center" for="txtMuestra">Tamaño de la muestra:</label>
-            <input
-            class="form-control form-control-sm"
-            type="number"
-            id="txtMuestra"
-            name="txtMuestra"
-            />
-        </div>
-    </div>
-
-    <div class="row mb-3 mx-3">
-        <div class="col">
-            <label class="form-label" for="txtSemilla">Semilla:</label>
+            <label class="form-label" for="txtSemilla">Semilla (X<sub>0</sub>):</label>
             <input
             class="form-control form-control-sm"
             type="number"
@@ -28,11 +18,20 @@
             name="txtSemilla"
             />
         </div>
+        <div class="col">
+            <label class="form-label" for="txtC">C (Cte. aditiva):</label>
+            <input
+            class="form-control form-control-sm"
+            type="number"
+            id="txtC"
+            name="txtC"
+            />
+        </div>
     </div>
 
     <div class="row mb-3 mx-3">
         <div class="col">
-            <label class="form-label" for="txtK">K:</label>
+            <label class="form-label" for="txtK">K (Entero positivo):</label>
             <input
             class="form-control form-control-sm"
             type="number"
@@ -41,7 +40,7 @@
             />
         </div>
         <div class="col">
-            <label class="form-label" for="txtA">A:</label>
+            <label class="form-label" for="txtA">A (Cte. multiplicativa):</label>
             <input
             class="form-control-plaintext"
             disabled
@@ -56,7 +55,7 @@
 
     <div class="row mb-3 mx-3">
         <div class="col">
-            <label class="form-label" for="txtG">G:</label>
+            <label class="form-label" for="txtG">G (Entero positivo):</label>
             <input
             class="form-control form-control-sm"
             type="number"
@@ -65,7 +64,7 @@
             />
         </div>
         <div class="col">
-            <label class="form-label" for="txtM">M:</label>
+            <label class="form-label" for="txtM">M (Módulo):</label>
             <input
             class="form-control-plaintext"
             readonly
@@ -78,20 +77,8 @@
         </div>
     </div>
 
-    <div class="row mb-3 mx-3">
-        <div class="col">
-            <label class="form-label" for="txtC">C (solo para Método Lineal):</label>
-            <input
-            class="form-control form-control-sm"
-            type="number"
-            id="txtC"
-            name="txtC"
-            />
-        </div>
-    </div>
-
     <div class="row mb-3 mx-5">
-        <button class="btn btn-dark mb-2" id="btnLineal" type="button" name="btnLineal">Método Congruencial Lineal</button>
+        <button class="btn btn-dark mb-2" id="btnLineal" type="button" name="btnLineal">Método Congruencial Mixto</button>
 
         <button class="btn btn-dark mb-2" id="btnMultiplicativo" type="button" name="btnMultiplicativo">
         Método Congruencial Multiplicativo
@@ -133,9 +120,13 @@
             <option value="12">12</option>
         </select>
 
-        <button class="btn btn-dark" id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
-        Prueba Chi Cuadrado
+        <button class="btn btn-dark mb-3" id="btnPruebaChiCuadrado" type="button" name="btnPrueba">
+        Prueba Chi Cuadrado <br> (Generador JavaScript)
         </button>
+
+        <button class="btn btn-dark mb-3" id="btnPruebaChiLineal" type="button" name="btnPruebaChiLineal">
+            Prueba Chi Cuadrado <br> (Generador Congruencial Mixto)
+            </button>
     </div>
 </form>
 
