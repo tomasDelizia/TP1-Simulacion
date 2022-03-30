@@ -22,6 +22,7 @@ export class TestChiCuadrado {
     }
     // Ordenamos el vector de números aleatorios.
     quickSort(this.rnds);
+    console.log(this.rnds);
 
     let limInferior: number = 0;
     const anchoIntervalo: number = 1 / cantIntervalos;
@@ -37,7 +38,7 @@ export class TestChiCuadrado {
       this.tabla.push([
         limInferior.toFixed(2) + ' - ' + limSuperior.toFixed(2),
         frecObservada.toString(),
-        frecEsperada.toString(),
+        frecEsperada.toFixed(4),
         estadistico.toFixed(4).toString(),
         this.estadisticoAcum.toFixed(4).toString(),
       ]);
@@ -65,7 +66,7 @@ export class TestChiCuadrado {
       this.tabla.push([
         limInferior.toFixed(2) + ' - ' + limSuperior.toFixed(2),
         frecObservada.toString(),
-        frecEsperada.toString(),
+        frecEsperada.toFixed(4),
         estadistico.toFixed(4).toString(),
         this.estadisticoAcum.toFixed(4).toString(),
       ]);
@@ -102,18 +103,18 @@ export class TestChiCuadrado {
     return frecEsperadas;
   }
   
-  public getValoresIntervalos(): number[] {
-    const ancho: number = 1 / this.tabla.length;
-    let limInf: number = 0;
-    let limSup: number;
-    let intervalos: number[] = [limInf];
-    for (let i: number = 0; i < this.tabla.length; i++) {
-      limSup = Number((limInf + ancho).toFixed(2));
-      intervalos.push(limSup);
-      limInf = limSup;
-    }
-    return intervalos;
-  }
+//  public getValoresIntervalos(): number[] {
+//    const ancho: number = 1 / this.tabla.length;
+//    let limInf: number = 0;
+//    let limSup: number;
+//    let intervalos: number[] = [limInf];
+//    for (let i: number = 0; i < this.tabla.length; i++) {
+//      limSup = Number((limInf + ancho).toFixed(2));
+//      intervalos.push(limSup);
+//      limInf = limSup;
+//    }
+//    return intervalos;
+//  }
 
   public getIntervalos(): string[] {
     let intervalos: string[] = [];

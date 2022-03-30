@@ -39,12 +39,12 @@ const tablaChiCuadrado: HTMLTableElement = document.getElementById('tablaChiCuad
 const cboCantIntervalos: HTMLSelectElement = document.getElementById('cboCantIntervalos') as HTMLSelectElement;
 
 // Definición del histograma de frecuencias.
-const histograma1: HTMLCanvasElement = document.getElementById('histograma1') as HTMLCanvasElement;
-const areaHistograma1 = histograma1.getContext('2d');
-let grafico1: Chart;
-const histograma2: HTMLCanvasElement = document.getElementById('histograma2') as HTMLCanvasElement;
-const areaHistograma2 = histograma2.getContext('2d');
-let grafico2: Chart;
+const histogramaFrecOb: HTMLCanvasElement = document.getElementById('histogramaFrecOb') as HTMLCanvasElement;
+const areaHistogramaFrecOb = histogramaFrecOb.getContext('2d');
+let graficoFrecOb: Chart;
+const histogramaFrecEsp: HTMLCanvasElement = document.getElementById('histogramaFrecEsp') as HTMLCanvasElement;
+const areaHistogramaFrecEsp = histogramaFrecEsp.getContext('2d');
+let graficoFrecEsp: Chart;
 
 // Detecta que el valor de K es ingresado por teclado y calcula A.
 txtK.addEventListener('input', calcularA)
@@ -128,10 +128,10 @@ btnLimpiar.addEventListener('click', () => {
 })
 
 function limpiarGrafico(): void {
-    if (grafico1 != null)
-        grafico1.destroy();
-    if (grafico2 != null)
-        grafico2.destroy();
+    if (graficoFrecOb != null)
+        graficoFrecOb.destroy();
+    if (graficoFrecEsp != null)
+        graficoFrecEsp.destroy();
 }
 
 // Dispara la prueba de Chi Cuadrado usando el generador de JavaScript.
@@ -165,6 +165,14 @@ btnPruebaChiLineal.addEventListener('click', async () => {
     else {
         generador = new GeneradorLineal();
         await generador.generarNumerosPseudoaleatorios(tamMuestra, 1, 1664525, 4294967296, 1013904223);
+        //const semilla: number = Number(txtSemilla.value);
+        //const k: number = Number(txtK.value);
+        //const g: number = Number(txtG.value);
+        //const c: number = Number(txtC.value);
+        //const a: number = 1 + 4 * k;
+        //const m: number = Math.pow(2, g);
+        //await generador.generarNumerosPseudoaleatorios//(tamMuestra, semilla, a, m, c);
+
         await testChiCuadrado.pruebaChiCuadradoLineal(cantIntervalos, tamMuestra, generador.getRnds());
         for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
             agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
@@ -208,7 +216,7 @@ btnGenerarGrafico.addEventListener('click', generarGrafico);
 
 // Función que genera el histograma de frecuencias a partir de la serie de números pseudoaleatorios producida.
 function generarGrafico(): void {
-    grafico1 = new Chart(areaHistograma1, {
+    graficoFrecOb = new Chart(areaHistogramaFrecOb, {
         type:'bar',
         data:{
             labels: testChiCuadrado.getIntervalos(),
@@ -227,7 +235,7 @@ function generarGrafico(): void {
         }
     });
 
-    grafico2 = new Chart(areaHistograma2, {
+    graficoFrecEsp = new Chart(areaHistogramaFrecEsp, {
         type:'bar',
         data:{
             labels: testChiCuadrado.getIntervalos(),
