@@ -65,7 +65,7 @@ txtK.addEventListener('input', calcularA)
 // Función que calcula el valor de A y lo muestra por pantalla.
 function calcularA(): void {
     a = 1 + 4 * Number(txtK.value);
-    txtA.value = '1 + 4k = ' + a;
+    txtA.value = a.toString();
 }
 
 // Detecta que el valor de G es ingresado por teclado y calcula M.
@@ -73,11 +73,11 @@ txtG.addEventListener('input', calcularG);
 
 // Función que calcula el valor de G y lo muestra por pantalla.
 function calcularG(): void {
-    g = Math.pow(2, Number(txtG.value));
-    txtM.value = "2ᵍ = " + g;
+    m = Math.pow(2, Number(txtG.value));
+    txtM.value = m.toString();
 }
 
-function validarParametrosLineal(): boolean {
+function validarParametros(): boolean {
     if (txtCantNumeros.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
         alert('Tiene que ingresar todos los parámetros solicitados.');
         return false;
@@ -101,45 +101,39 @@ btnLineal.addEventListener('click', async () => {
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorLineal();
     // Si alguno de los parámetros no se ingresa correctamente, se rechaza la petición.
-    if (!validarParametrosLineal())
+    if (!validarParametros())
         return;
     else {
-        console.log(cantNumeros, semilla, a, m, c);
         await generador.generarNumerosPseudoaleatorios(cantNumeros, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
         }
     }
-})
+});
 
 // Dispara la generación de números pseudoaleatorios por el Método Congruencial Multiplicativo.
 btnMultiplicativo.addEventListener('click', async e => {
     // Mostramos el valor del parámetro c como 0.
-    txtC.value = '0';
+    txtC.value = '1';
     // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaNumeros);
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorMultiplicativo();
     // Si alguno de los parámetros no se ingresa correctamente, se rechaza la petición.
-    if (txtCantNumeros.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "") {
-        alert('Tiene que ingresar todos los parámetros (excepto C).');
-    }
+    if (!validarParametros())
+        return;
     else {
-        cantNumeros = Number(txtCantNumeros.value);
-        semilla = Number(txtSemilla.value);
-        k = Number(txtK.value);
-        g = Number(txtG.value);
+        txtC.value = '0';
         c = 0;
         a = 3 + 8 * k;
-        m = Math.pow(2, g);
         await generador.generarNumerosPseudoaleatorios(cantNumeros, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
         }
     }
-})
+});
 
 // Limpia la tabla y los parámetros ingresados al tocar el botón Limpiar.
 btnLimpiar.addEventListener('click', () => {
