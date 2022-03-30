@@ -46,12 +46,25 @@ const histogramaFrecEsp: HTMLCanvasElement = document.getElementById('histograma
 const areaHistogramaFrecEsp = histogramaFrecEsp.getContext('2d');
 let graficoFrecEsp: Chart;
 
+// Definición de los parámetros para los generadores.
+let cantNumeros: number;
+let semilla: number;
+let k: number;
+let g: number;
+let c: number;
+let a: number;
+let m: number;
+
+// Definición de los parámetros para la prueba de Chi Cuadrado.
+let tamMuestra: number;
+let cantIntervalos: number;
+
 // Detecta que el valor de K es ingresado por teclado y calcula A.
 txtK.addEventListener('input', calcularA)
 
 // Función que calcula el valor de A y lo muestra por pantalla.
 function calcularA(): void {
-    let a: number = 1 + 4 * Number(txtK.value);
+    a = 1 + 4 * Number(txtK.value);
     txtA.value = '1 + 4k = ' + a;
 }
 
@@ -60,8 +73,25 @@ txtG.addEventListener('input', calcularG);
 
 // Función que calcula el valor de G y lo muestra por pantalla.
 function calcularG(): void {
-    let g: number = Math.pow(2, Number(txtG.value));
+    g = Math.pow(2, Number(txtG.value));
     txtM.value = "2ᵍ = " + g;
+}
+
+function validarParametrosLineal(): boolean {
+    if (txtCantNumeros.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
+        alert('Tiene que ingresar todos los parámetros solicitados.');
+        return false;
+    };
+    cantNumeros = Number(txtCantNumeros.value);
+    semilla = Number(txtSemilla.value);
+    k = Number(txtK.value);
+    g = Number(txtG.value);
+    c = Number(txtC.value);
+    if (cantNumeros <= 0 || semilla <= 0 || k <= 0 || g <= 0 || c <= 0) {
+        alert('Debe ingresar únicamente valores enteros positivos.');
+        return false;
+    };
+    return true;
 }
 
 // Dispara la generación de números pseudoaleatorios por el Método Congruencial Lineal.
@@ -70,18 +100,11 @@ btnLineal.addEventListener('click', async () => {
     limpiarTabla(tablaNumeros);
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorLineal();
-    // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
-    if (txtCantNumeros.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
-        alert('Tiene que ingresar todos los parámetros necesarios.');
-    }
+    // Si alguno de los parámetros no se ingresa correctamente, se rechaza la petición.
+    if (!validarParametrosLineal())
+        return;
     else {
-        const cantNumeros: number = Number(txtCantNumeros.value);
-        const semilla: number = Number(txtSemilla.value);
-        const k: number = Number(txtK.value);
-        const g: number = Number(txtG.value);
-        const c: number = Number(txtC.value);
-        const a: number = 1 + 4 * k;
-        const m: number = Math.pow(2, g);
+        console.log(cantNumeros, semilla, a, m, c);
         await generador.generarNumerosPseudoaleatorios(cantNumeros, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
@@ -98,18 +121,18 @@ btnMultiplicativo.addEventListener('click', async e => {
     limpiarTabla(tablaNumeros);
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorMultiplicativo();
-    // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
+    // Si alguno de los parámetros no se ingresa correctamente, se rechaza la petición.
     if (txtCantNumeros.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "") {
         alert('Tiene que ingresar todos los parámetros (excepto C).');
     }
     else {
-        const cantNumeros: number = Number(txtCantNumeros.value);
-        const semilla: number = Number(txtSemilla.value);
-        const k: number = Number(txtK.value);
-        const g: number = Number(txtG.value);
-        const c: number = 0;
-        const a: number = 3 + 8 * k;
-        const m: number = Math.pow(2, g);
+        cantNumeros = Number(txtCantNumeros.value);
+        semilla = Number(txtSemilla.value);
+        k = Number(txtK.value);
+        g = Number(txtG.value);
+        c = 0;
+        a = 3 + 8 * k;
+        m = Math.pow(2, g);
         await generador.generarNumerosPseudoaleatorios(cantNumeros, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
@@ -158,8 +181,8 @@ btnPruebaChiLineal.addEventListener('click', async () => {
     // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaChiCuadrado);
     limpiarGrafico();
-    const cantIntervalos: number = Number(cboCantIntervalos.value);
-    const tamMuestra: number = Number(txtMuestraChi.value);
+    cantIntervalos = Number(cboCantIntervalos.value);
+    tamMuestra = Number(txtMuestraChi.value);
     if (cboCantIntervalos.value == '0' || txtMuestraChi.value == "")
         alert('Ingrese los parámetros requeridos.');
     else {

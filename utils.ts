@@ -37,31 +37,31 @@ export function quickSort(vec: number[], izq: number = 0, der: number = vec.leng
 
 // Función que encuentra el primer índice de un vector cuyo valor es >= a un valor x.
 function indiceMenor(vec: number[], x: number): number {
-    let menor: number = 0;
-    let mayor: number = vec.length - 1;
-    while (menor <= mayor) {
-        let medio: number = Math.floor((menor + mayor) / 2);
+    let izq: number = 0;
+    let der: number = vec.length - 1;
+    while (izq <= der) {
+        let medio: number = Math.floor((izq + der) / 2);
         if (vec[medio] >= x)
-          mayor = medio - 1;
+          der = medio - 1;
         else
-            menor = medio + 1;
+            izq = medio + 1;
     }
-    return menor;
+    return izq;
 }
    
 // Función que encuentra el primer índice de un vector cuyo valor es < a un valor y.
 function indiceMayor(vec: number[], y: number): number {
-    let menor: number = 0;
-    let mayor = vec.length - 1;
-    while (menor <= mayor)
+    let izq: number = 0;
+    let der = vec.length - 1;
+    while (izq <= der)
     {
-        let medio: number = Math.floor((menor + mayor) / 2);
+        let medio: number = Math.floor((izq + der) / 2);
         if (vec[medio] < y)
-            menor = medio + 1;
+            izq = medio + 1;
         else
-            mayor = medio - 1;
+            der = medio - 1;
     }
-    return mayor;
+    return der;
 }
    
 // Función que cuenta los elementos de un vector en un rango dado.

@@ -22,7 +22,6 @@ export class TestChiCuadrado {
     }
     // Ordenamos el vector de números aleatorios.
     quickSort(this.rnds);
-    console.log(this.rnds);
 
     let limInferior: number = 0;
     const anchoIntervalo: number = 1 / cantIntervalos;
