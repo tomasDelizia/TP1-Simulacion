@@ -93,6 +93,14 @@ export class TestChiCuadrado {
     }
     return frecObservadas;
   }
+
+  public getFrecuenciasEsperadas(): number[] {
+    let frecEsperadas: number[] = [];
+    for (let i: number = 0; i < this.tabla.length; i++) {
+      frecEsperadas.push(Number(this.tabla[i][2]));
+    }
+    return frecEsperadas;
+  }
   
   public getValoresIntervalos(): number[] {
     const ancho: number = 1 / this.tabla.length;

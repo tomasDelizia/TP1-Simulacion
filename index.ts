@@ -20,6 +20,7 @@ const btnPruebaChiLineal: HTMLButtonElement = document.getElementById('btnPrueba
 const btnGenerarGrafico: HTMLButtonElement = document.getElementById('btnGenerarGrafico') as HTMLButtonElement;
 
 // Definición de los cuadros de texto de la interfaz de usuario.
+const txtCantNumeros: HTMLInputElement = document.getElementById('txtCantNumeros') as HTMLInputElement;
 const txtSemilla: HTMLInputElement = document.getElementById('txtSemilla') as HTMLInputElement;
 const txtA: HTMLInputElement = document.getElementById('txtA') as HTMLInputElement;
 const txtK: HTMLInputElement = document.getElementById('txtK') as HTMLInputElement;
@@ -38,9 +39,12 @@ const tablaChiCuadrado: HTMLTableElement = document.getElementById('tablaChiCuad
 const cboCantIntervalos: HTMLSelectElement = document.getElementById('cboCantIntervalos') as HTMLSelectElement;
 
 // Definición del histograma de frecuencias.
-const histograma: HTMLCanvasElement = document.getElementById('histograma') as HTMLCanvasElement;
-const areaHistograma = histograma.getContext('2d');
-let grafico: Chart;
+const histograma1: HTMLCanvasElement = document.getElementById('histograma1') as HTMLCanvasElement;
+const areaHistograma1 = histograma1.getContext('2d');
+let grafico1: Chart;
+const histograma2: HTMLCanvasElement = document.getElementById('histograma2') as HTMLCanvasElement;
+const areaHistograma2 = histograma2.getContext('2d');
+let grafico2: Chart;
 
 // Detecta que el valor de K es ingresado por teclado y calcula A.
 txtK.addEventListener('input', calcularA)
@@ -67,17 +71,18 @@ btnLineal.addEventListener('click', async () => {
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorLineal();
     // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
-    if (txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
+    if (txtCantNumeros.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "" || txtC.value == "") {
         alert('Tiene que ingresar todos los parámetros necesarios.');
     }
     else {
+        const cantNumeros: number = Number(txtCantNumeros.value);
         const semilla: number = Number(txtSemilla.value);
         const k: number = Number(txtK.value);
         const g: number = Number(txtG.value);
         const c: number = Number(txtC.value);
         const a: number = 1 + 4 * k;
         const m: number = Math.pow(2, g);
-        await generador.generarNumerosPseudoaleatorios(20, semilla, a, m, c);
+        await generador.generarNumerosPseudoaleatorios(cantNumeros, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
@@ -94,17 +99,18 @@ btnMultiplicativo.addEventListener('click', async e => {
     // Iniciamos el generador de números pseudoaleatorios.
     generador = new GeneradorMultiplicativo();
     // Si alguno de los parámetros no es ingresado por el usuario, se rechaza la petición.
-    if (txtSemilla.value == "" || txtK.value == "" || txtG.value == "") {
+    if (txtCantNumeros.value == "" || txtSemilla.value == "" || txtK.value == "" || txtG.value == "") {
         alert('Tiene que ingresar todos los parámetros (excepto C).');
     }
     else {
+        const cantNumeros: number = Number(txtCantNumeros.value);
         const semilla: number = Number(txtSemilla.value);
         const k: number = Number(txtK.value);
         const g: number = Number(txtG.value);
         const c: number = 0;
         const a: number = 3 + 8 * k;
         const m: number = Math.pow(2, g);
-        await generador.generarNumerosPseudoaleatorios(20, semilla, a, m, c);
+        await generador.generarNumerosPseudoaleatorios(cantNumeros, semilla, a, m, c);
         for (let i: number = 0; i < generador.getEnteros().length; i++) {
             agregarFilaATabla(
                 [i, generador.getEnteros()[i], generador.getRnds()[i]], tablaNumeros);
@@ -122,8 +128,10 @@ btnLimpiar.addEventListener('click', () => {
 })
 
 function limpiarGrafico(): void {
-    if (grafico != null)
-        grafico.destroy();
+    if (grafico1 != null)
+        grafico1.destroy();
+    if (grafico2 != null)
+        grafico2.destroy();
 }
 
 // Dispara la prueba de Chi Cuadrado usando el generador de JavaScript.
@@ -158,7 +166,6 @@ btnPruebaChiLineal.addEventListener('click', async () => {
         generador = new GeneradorLineal();
         await generador.generarNumerosPseudoaleatorios(tamMuestra, 1, 1664525, 4294967296, 1013904223);
         await testChiCuadrado.pruebaChiCuadradoLineal(cantIntervalos, tamMuestra, generador.getRnds());
-        console.log(testChiCuadrado.getTabla());
         for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
             agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
         }
@@ -169,6 +176,7 @@ btnPruebaChiLineal.addEventListener('click', async () => {
 
 // Función que borra los parámetros ingresados por el usuario.
 function limpiarParametros(): void {
+    txtCantNumeros.value = '';
     txtA.value = '1 + 4k = ';
     txtC.value = '';
     txtG.value = '';
@@ -200,14 +208,14 @@ btnGenerarGrafico.addEventListener('click', generarGrafico);
 
 // Función que genera el histograma de frecuencias a partir de la serie de números pseudoaleatorios producida.
 function generarGrafico(): void {
-    grafico = new Chart(areaHistograma, {
+    grafico1 = new Chart(areaHistograma1, {
         type:'bar',
         data:{
             labels: testChiCuadrado.getIntervalos(),
             datasets:[{
                 label: 'Frecuencias observadas',
                 data: testChiCuadrado.getFrecuenciasObservadas(),
-                backgroundColor: 'rgb(66, 134, 244,0.5)'
+                backgroundColor: '#F8C471'
             }]
         },
         options:{
@@ -218,4 +226,25 @@ function generarGrafico(): void {
             }
         }
     });
+
+    grafico2 = new Chart(areaHistograma2, {
+        type:'bar',
+        data:{
+            labels: testChiCuadrado.getIntervalos(),
+            datasets:[{
+                label: 'Frecuencias esperada',
+                data: testChiCuadrado.getFrecuenciasEsperadas(),
+                backgroundColor: '#F8C471'
+            }]
+        },
+        options:{
+            scales:{
+                yAxes:{
+                    beginAtZero:true
+                }
+            }
+        }
+    });
+
+    
 }
