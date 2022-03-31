@@ -122,4 +122,8 @@ export class TestChiCuadrado {
     }
     return intervalos;
   }
+
+  public getRnds(): number[] {
+    return this.rnds;
+  }
 }

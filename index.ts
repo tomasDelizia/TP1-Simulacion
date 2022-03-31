@@ -1,4 +1,5 @@
 import { Chart } from 'chart.js';
+import { GeneradorCSV } from './GeneradorCSV';
 import { GeneradorLineal } from './GeneradorLineal';
 import { GeneradorMultiplicativo } from './GeneradorMultiplicativo';
 import { GeneradorNumeros } from './GeneradorNumeros';
@@ -18,6 +19,7 @@ const btnLimpiar: HTMLButtonElement = document.getElementById('btnLimpiar') as H
 const btnPruebaChiCuadrado: HTMLButtonElement = document.getElementById('btnPruebaChiCuadrado') as HTMLButtonElement;
 const btnPruebaChiLineal: HTMLButtonElement = document.getElementById('btnPruebaChiLineal') as HTMLButtonElement;
 const btnGenerarGrafico: HTMLButtonElement = document.getElementById('btnGenerarGrafico') as HTMLButtonElement;
+const btnDescargarSerie: HTMLButtonElement = document.getElementById('btnDescargarSerie') as HTMLButtonElement;
 
 // Definición de los cuadros de texto de la interfaz de usuario.
 const txtCantNumeros: HTMLInputElement = document.getElementById('txtCantNumeros') as HTMLInputElement;
@@ -58,6 +60,9 @@ let m: number;
 // Definición de los parámetros para la prueba de Chi Cuadrado.
 let tamMuestra: number;
 let cantIntervalos: number;
+
+// Definición del generador de archivos CSV.
+const generadorCSV: GeneradorCSV = new GeneradorCSV();
 
 // Detecta que el valor de K es ingresado por teclado y calcula A.
 txtK.addEventListener('input', calcularA)
@@ -141,6 +146,7 @@ btnLimpiar.addEventListener('click', () => {
     limpiarTabla(tablaChiCuadrado);
     limpiarParametros();
     btnGenerarGrafico.disabled = true;
+    btnDescargarSerie.disabled = true;
     limpiarGrafico();
 })
 
@@ -167,28 +173,42 @@ btnPruebaChiCuadrado.addEventListener('click', async () => {
         }
         txtResultHipotesis.value = testChiCuadrado.validarHipotesis();
         btnGenerarGrafico.disabled = false;
+        btnDescargarSerie.disabled = false;
     }
 })
+
+function validarParametrosPruebaChi(): boolean {
+    cantIntervalos = Number(cboCantIntervalos.value);
+    tamMuestra = Number(txtMuestraChi.value);
+    txtCantNumeros.value = tamMuestra.toString();
+    if (cantIntervalos == 0) {
+        alert('Seleccione la cantidad de intervalos.');
+        return false;
+    }
+    if (txtMuestraChi.value == "") {
+        alert('Ingrese el tamaño de la muestra.');
+        return false;
+    }
+    if (tamMuestra <= 0) {
+        alert('La muestra debe ser mayor a cero.');
+        return false;
+    }
+    return true;
+}
 
 // Dispara la prueba de Chi Cuadrado usando el Generador Congruencial Mixto.
 btnPruebaChiLineal.addEventListener('click', async () => {
     // Limpiamos la tabla para volver a llenarla.
     limpiarTabla(tablaChiCuadrado);
     limpiarGrafico();
-    cantIntervalos = Number(cboCantIntervalos.value);
-    tamMuestra = Number(txtMuestraChi.value);
-    if (cboCantIntervalos.value == '0' || txtMuestraChi.value == "")
-        alert('Ingrese los parámetros requeridos.');
+    
+    if (!validarParametrosPruebaChi() || !validarParametros())
+        return;
     else {
         generador = new GeneradorLineal();
-        await generador.generarNumerosPseudoaleatorios(tamMuestra, 1, 1664525, 4294967296, 1013904223);
-        //const semilla: number = Number(txtSemilla.value);
-        //const k: number = Number(txtK.value);
-        //const g: number = Number(txtG.value);
-        //const c: number = Number(txtC.value);
-        //const a: number = 1 + 4 * k;
-        //const m: number = Math.pow(2, g);
-        //await generador.generarNumerosPseudoaleatorios//(tamMuestra, semilla, a, m, c);
+        //await generador.generarNumerosPseudoaleatorios(tamMuestra, 1, 1664525, 4294967296, 1013904223);
+
+        await generador.generarNumerosPseudoaleatorios(tamMuestra, semilla, a, m, c);
 
         await testChiCuadrado.pruebaChiCuadradoLineal(cantIntervalos, tamMuestra, generador.getRnds());
         for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
@@ -196,6 +216,7 @@ btnPruebaChiLineal.addEventListener('click', async () => {
         }
         txtResultHipotesis.value = testChiCuadrado.validarHipotesis();
         btnGenerarGrafico.disabled = false;
+        btnDescargarSerie.disabled = false;
     }
 })
 
@@ -257,9 +278,9 @@ function generarGrafico(): void {
         data:{
             labels: testChiCuadrado.getIntervalos(),
             datasets:[{
-                label: 'Frecuencias esperada',
+                label: 'Frecuencias esperadas',
                 data: testChiCuadrado.getFrecuenciasEsperadas(),
-                backgroundColor: '#F8C471'
+                backgroundColor: '#F87272'
             }]
         },
         options:{
@@ -270,6 +291,12 @@ function generarGrafico(): void {
             }
         }
     });
+}
 
-    
+// Dispara la generación de un archivo csv 
+btnDescargarSerie.addEventListener('click', generarArchivo);
+
+// Genera un archivo CSV que contiene los números aleatorios generados.
+function generarArchivo(): void {
+    generadorCSV.generarArchivo(testChiCuadrado.getRnds(), 'Serie');
 }
