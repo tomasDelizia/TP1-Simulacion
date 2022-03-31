@@ -159,9 +159,13 @@ function limpiarGrafico(): void {
 
 // Dispara la prueba de Chi Cuadrado usando el generador de JavaScript.
 btnPruebaChiCuadrado.addEventListener('click', async () => {
-    // Limpiamos la tabla para volver a llenarla.
+    // Limpiamos la tabla, los gráfico y el resultado de una prueba anterior.
     limpiarTabla(tablaChiCuadrado);
     limpiarGrafico();
+    txtResultHipotesis.value = '';
+    btnGenerarGrafico.disabled = true;
+    btnDescargarSerie.disabled = true;
+    
     const cantIntervalos: number = Number(cboCantIntervalos.value);
     const tamMuestra: number = Number(txtMuestraChi.value);
     if (cboCantIntervalos.value == '0' || txtMuestraChi.value == "")
@@ -198,9 +202,12 @@ function validarParametrosPruebaChi(): boolean {
 
 // Dispara la prueba de Chi Cuadrado usando el Generador Congruencial Mixto.
 btnPruebaChiLineal.addEventListener('click', async () => {
-    // Limpiamos la tabla para volver a llenarla.
+    // Limpiamos la tabla, los gráfico y el resultado de una prueba anterior.
     limpiarTabla(tablaChiCuadrado);
     limpiarGrafico();
+    txtResultHipotesis.value = '';
+    btnGenerarGrafico.disabled = true;
+    btnDescargarSerie.disabled = true;
     
     if (!validarParametrosPruebaChi() || !validarParametros())
         return;
