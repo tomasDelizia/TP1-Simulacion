@@ -47,7 +47,8 @@ export class TestChiCuadrado {
 
   // Prueba de Chi cuadrado utilizando un vector de números pasado por parámetro.
   public async pruebaChiCuadradoLineal(cantIntervalos: number, tamMuestra: number, rnds: number[]): Promise<any> {
-
+    // Seteamos el vector de rnds como atributo de la clase.
+    this.rnds = rnds;
     // Ordenamos el vector de números aleatorios.
     quickSort(rnds);
 

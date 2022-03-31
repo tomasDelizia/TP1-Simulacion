@@ -10,7 +10,7 @@ import { TestChiCuadrado } from './TestChiCuadrado';
 let generador: GeneradorNumeros;
 
 // El test de Chi Cuadrado.
-let testChiCuadrado: TestChiCuadrado = new TestChiCuadrado();
+let testChiCuadrado: TestChiCuadrado;
 
 // Definición de botones de la interfaz de usuario.
 const btnLineal: HTMLButtonElement = document.getElementById('btnLineal') as HTMLButtonElement;
@@ -165,12 +165,13 @@ btnPruebaChiCuadrado.addEventListener('click', async () => {
     txtResultHipotesis.value = '';
     btnGenerarGrafico.disabled = true;
     btnDescargarSerie.disabled = true;
-    
+
     const cantIntervalos: number = Number(cboCantIntervalos.value);
     const tamMuestra: number = Number(txtMuestraChi.value);
     if (cboCantIntervalos.value == '0' || txtMuestraChi.value == "")
         alert('Ingrese los parámetros requeridos.');
     else {
+        testChiCuadrado = new TestChiCuadrado();
         await testChiCuadrado.pruebaChiCuadrado(cantIntervalos, tamMuestra);
         for (let i: number = 0; i < testChiCuadrado.getTabla().length; i++) {
             agregarFilaATabla(testChiCuadrado.getTabla()[i], tablaChiCuadrado);
@@ -212,6 +213,7 @@ btnPruebaChiLineal.addEventListener('click', async () => {
     if (!validarParametrosPruebaChi() || !validarParametros())
         return;
     else {
+        testChiCuadrado = new TestChiCuadrado();
         generador = new GeneradorLineal();
         //await generador.generarNumerosPseudoaleatorios(tamMuestra, 1, 1664525, 4294967296, 1013904223);
 
