@@ -223,11 +223,12 @@ btnPruebaChiLineal.addEventListener('click', async () => {
 // Función que borra los parámetros ingresados por el usuario.
 function limpiarParametros(): void {
     txtCantNumeros.value = '';
-    txtA.value = '1 + 4k = ';
+    txtA.value = '';
     txtC.value = '';
     txtG.value = '';
     txtK.value = '';
-    txtM.value = '2ᵍ = ';
+    txtM.value = '';
+    txtMuestraChi.value = '';
     txtSemilla.value = '';
     cboCantIntervalos.value = "0";
     txtResultHipotesis.value = "";
