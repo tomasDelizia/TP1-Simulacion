@@ -147,10 +147,10 @@ btnLimpiar.addEventListener('click', () => {
     limpiarParametros();
     btnGenerarGrafico.disabled = true;
     btnDescargarSerie.disabled = true;
-    limpiarGrafico();
+    limpiarGraficos();
 })
 
-function limpiarGrafico(): void {
+function limpiarGraficos(): void {
     if (graficoFrecOb != null)
         graficoFrecOb.destroy();
     if (graficoFrecEsp != null)
@@ -161,7 +161,7 @@ function limpiarGrafico(): void {
 btnPruebaChiCuadrado.addEventListener('click', async () => {
     // Limpiamos la tabla, los gráfico y el resultado de una prueba anterior.
     limpiarTabla(tablaChiCuadrado);
-    limpiarGrafico();
+    limpiarGraficos();
     txtResultHipotesis.value = '';
     btnGenerarGrafico.disabled = true;
     btnDescargarSerie.disabled = true;
@@ -205,7 +205,7 @@ function validarParametrosPruebaChi(): boolean {
 btnPruebaChiLineal.addEventListener('click', async () => {
     // Limpiamos la tabla, los gráfico y el resultado de una prueba anterior.
     limpiarTabla(tablaChiCuadrado);
-    limpiarGrafico();
+    limpiarGraficos();
     txtResultHipotesis.value = '';
     btnGenerarGrafico.disabled = true;
     btnDescargarSerie.disabled = true;
@@ -264,6 +264,7 @@ btnGenerarGrafico.addEventListener('click', generarGrafico);
 
 // Función que genera el histograma de frecuencias a partir de la serie de números pseudoaleatorios producida.
 function generarGrafico(): void {
+    limpiarGraficos();
     graficoFrecOb = new Chart(areaHistogramaFrecOb, {
         type:'bar',
         data:{

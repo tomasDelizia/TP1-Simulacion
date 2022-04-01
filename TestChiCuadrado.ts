@@ -50,7 +50,7 @@ export class TestChiCuadrado {
     // Seteamos el vector de rnds como atributo de la clase.
     this.rnds = rnds;
     // Ordenamos el vector de números aleatorios.
-    quickSort(rnds);
+    quickSort(this.rnds);
 
     let limInferior: number = 0;
     const anchoIntervalo: number = 1 / cantIntervalos;
@@ -60,8 +60,8 @@ export class TestChiCuadrado {
     this.v = cantIntervalos - 1;
     for (let i: number = 0; i < cantIntervalos; i++) {
       let limSuperior: number = limInferior + anchoIntervalo;
-      let frecObservada = contarEnRango(rnds, limInferior, limSuperior);
-      let estadistico : number = (Math.pow((frecObservada-frecEsperada),2)) / frecEsperada;
+      let frecObservada = contarEnRango(this.rnds, limInferior, limSuperior);
+      let estadistico : number = (Math.pow((frecObservada-frecEsperada), 2)) / frecEsperada;
       this.estadisticoAcum += estadistico;
       this.tabla.push([
         limInferior.toFixed(2) + ' - ' + limSuperior.toFixed(2),
