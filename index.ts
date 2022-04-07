@@ -252,7 +252,7 @@ function limpiarTabla(tabla: HTMLTableElement) {
 
 // Agregar una fila a una tabla html a partir de un vector pasado por parámetro.
 function agregarFilaATabla(fila: any[], tabla: HTMLTableElement) {
-    let filaHTML: HTMLTableRowElement = tabla.insertRow();
+    let filaHTML: HTMLTableRowElement = tabla.getElementsByTagName('tbody')[0].insertRow();
     for (let i: number = 0; i < fila.length; i++) {
         let celda = filaHTML.insertCell();
         celda.appendChild(document.createTextNode(String(fila[i])));

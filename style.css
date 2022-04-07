@@ -12,3 +12,13 @@ table {
 body{
   background-color: darkgrey;
 }
+
+thead, tbody {
+  display: block;
+}
+
+tbody {
+  height: 50%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
